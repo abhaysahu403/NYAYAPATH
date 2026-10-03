@@ -36,5 +36,9 @@ Docs: `/api/v1/docs/` (Swagger), `/api/v1/schema/`. Responses: `{success, data, 
 git clone https://github.com/abhaysahu403/NYAYAPATH.git && cd NYAYAPATH
 docker compose up -d --build
 ```
-Open `http://<host>/` (nginx serves `frontend/` and proxies `/api/` to Django). Demo login is auto-seeded.
+Open `http://<host>/` (Caddy serves `frontend/` and proxies `/api/` to Django). Demo login is auto-seeded.
 For real use: set `.env` (copy `.env.example`), `AI_PROVIDER=gemini`, `GEMINI_API_KEY`, a strong `SECRET_KEY`, explicit `ALLOWED_HOSTS`.
+
+### HTTPS
+Set `SITE_ADDRESS` in `.env` to a hostname pointing at the server (ports 80+443 open), e.g. `SITE_ADDRESS=1-2-3-4.sslip.io`.
+Caddy fetches and renews a Let's Encrypt certificate automatically. Leave unset for plain HTTP on :80.

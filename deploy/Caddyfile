@@ -1,0 +1,17 @@
+{$SITE_ADDRESS::80} {
+	encode gzip
+	request_body {
+		max_size 25MB
+	}
+	handle /api/* {
+		reverse_proxy web:8000
+	}
+	handle /admin/* {
+		reverse_proxy web:8000
+	}
+	handle {
+		root * /srv
+		try_files {path} /index.html
+		file_server
+	}
+}
