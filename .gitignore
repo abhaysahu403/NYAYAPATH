@@ -1,0 +1,9 @@
+.env
+*.pyc
+__pycache__/
+private_media/
+private_media_test/
+staticfiles/
+db.sqlite3
+.pytest_cache/
+.venv/

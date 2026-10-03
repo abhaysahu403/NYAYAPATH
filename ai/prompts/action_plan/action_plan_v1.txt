@@ -1,0 +1,13 @@
+$legal_rules
+
+Create a possible-next-steps plan (language "$language") for the situation below. Steps are OPTIONS to discuss/verify, not instructions. Prefer steps supported by the SOURCES and cite them via source_ids. A step with no source must be a generic information-gathering step.
+
+Return ONLY JSON:
+{"title":"...","situation_assessment":"2-3 hedged sentences using only provided facts","delay_cause_analysis":null,"immediate_priority":"one hedged sentence","steps":[{"title":"...","description":"...","why_relevant":"...","required_documents":["..."],"legal_basis":null,"estimated_timeline":null,"difficulty":"EASY|MEDIUM|HARD","kind":"POSSIBLE_OPTION|INFORMATION_GATHERING","source_ids":["S1"]}],"warnings":["..."]}
+3-6 steps. Do not state fees, deadlines or timelines unless a source states them.
+
+KNOWN FACTS (user-provided, unverified): $facts
+UNKNOWN: $unknowns
+
+SOURCES:
+$sources

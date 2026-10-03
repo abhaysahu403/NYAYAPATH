@@ -1,0 +1,10 @@
+$legal_rules
+
+Explain the judgment passages below in plain language (language "$language"). Only describe what the passages say. If a field is not stated in the passages, set it to null. Do not add facts from memory.
+Return ONLY JSON: {"plain_summary":"...","key_facts":["..."],"legal_issue":null,"court_reasoning":null,"outcome":null,"relevance_to_question":null,"source_ids":["S1"]}
+Labels refer to passages; cite pages/sections via those labels.
+
+USER QUESTION (may be empty): $question
+
+PASSAGES:
+$sources

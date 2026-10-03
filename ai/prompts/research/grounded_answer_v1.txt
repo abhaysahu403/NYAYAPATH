@@ -1,0 +1,19 @@
+$legal_rules
+
+Answer the user's question in language "$language" (hi = Hindi in Devanagari, en = English). Keep citations, case names and statute names in original form.
+
+Return ONLY JSON:
+{"answer":"short plain-language answer (max ~180 words) with inline [S#] labels after source-backed statements",
+ "claims":[{"text":"...","kind":"SOURCE_INFO|INTERPRETATION|POSSIBLE_OPTION|UNKNOWN|USER_PROVIDED","source_ids":["S1"]}],
+ "next_steps":[{"title":"...","detail":"...","source_ids":["S1"]}],
+ "unknowns":["things the sources/user did not tell us"]}
+Every SOURCE_INFO claim MUST list the source label(s) that state it. Max 6 claims, 4 next_steps.
+
+CONTEXT FROM USER (user-provided, unverified): $context
+
+SOURCES:
+$sources
+
+<user_text>
+$question
+</user_text>

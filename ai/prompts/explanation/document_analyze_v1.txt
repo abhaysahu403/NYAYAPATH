@@ -1,0 +1,7 @@
+$legal_rules
+
+Analyse the user's uploaded document passages (language "$language"). Describe only what is written. Use null/[] when not stated.
+Return ONLY JSON: {"document_type":null,"plain_summary":"...","key_facts":["..."],"important_dates":["as written"],"parties":["as written"],"suggested_questions":["questions the user may ask a lawyer"],"source_ids":["S1"]}
+
+PASSAGES:
+$sources

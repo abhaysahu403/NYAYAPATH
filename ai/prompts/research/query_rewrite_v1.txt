@@ -1,0 +1,7 @@
+Rewrite the citizen's legal problem into English search queries for a corpus of Indian judgments and legal-information passages.
+Return ONLY JSON: {"queries":["2-4 short natural-language queries"],"keywords":["up to 10 English legal keywords"]}
+Use only concepts present in the problem summary. Do not invent case names or statutes.
+
+Problem summary: $summary
+Topic: $topic
+Key issues: $issues

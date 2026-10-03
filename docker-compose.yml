@@ -1,0 +1,16 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment: {POSTGRES_DB: nyayapath, POSTGRES_USER: nyaya, POSTGRES_PASSWORD: nyaya}
+    volumes: [pgdata:/var/lib/postgresql/data]
+    ports: ["5432:5432"]
+  web:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: postgres://nyaya:nyaya@db:5432/nyayapath
+      DJANGO_SETTINGS_MODULE: config.settings.development
+    depends_on: [db]
+    ports: ["8000:8000"]
+    volumes: [private_media:/app/private_media]
+volumes: {pgdata: {}, private_media: {}}
