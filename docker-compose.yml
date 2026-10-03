@@ -1,16 +1,38 @@
 services:
   db:
     image: pgvector/pgvector:pg16
+    restart: unless-stopped
     environment: {POSTGRES_DB: nyayapath, POSTGRES_USER: nyaya, POSTGRES_PASSWORD: nyaya}
     volumes: [pgdata:/var/lib/postgresql/data]
-    ports: ["5432:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nyaya -d nyayapath"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
   web:
     build: .
-    env_file: .env
+    restart: unless-stopped
+    env_file:
+      - .env.example
+      - {path: .env, required: false}
     environment:
       DATABASE_URL: postgres://nyaya:nyaya@db:5432/nyayapath
-      DJANGO_SETTINGS_MODULE: config.settings.development
-    depends_on: [db]
-    ports: ["8000:8000"]
+    depends_on:
+      db: {condition: service_healthy}
     volumes: [private_media:/app/private_media]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u;u.urlopen('http://localhost:8000/api/v1/health/')"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    depends_on:
+      web: {condition: service_healthy}
+    ports: ["80:80"]
+    volumes:
+      - ./deploy/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./frontend:/usr/share/nginx/html:ro
 volumes: {pgdata: {}, private_media: {}}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documents — NyayaPath</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖</text></svg>" />
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/pages.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+</head>
+<body>
+<div id="app-nav"></div>
+<main class="np-page"><div class="container">
+
+<div class="np-page-head">
+  <div class="section-eyebrow" data-en="DOCUMENTS" data-hi="दस्तावेज़">DOCUMENTS</div>
+  <h1 data-en="Understand Your Documents" data-hi="अपने दस्तावेज़ समझें">Understand Your Documents</h1>
+  <p data-en="Upload a court order, judgment, notice, land document or other legal document. We read it and explain it in simple language." data-hi="कोर्ट आदेश, निर्णय, नोटिस, भूमि दस्तावेज़ या अन्य कानूनी दस्तावेज़ अपलोड करें। हम उसे पढ़कर सरल भाषा में समझाते हैं।">Upload a court order, judgment, notice, land document or other legal document.</p>
+</div>
+<div class="np-grid" style="grid-template-columns:320px 1fr;align-items:start" id="docLayout">
+  <aside>
+    <div class="np-drop" id="drop" tabindex="0" role="button" aria-label="Upload document">
+      <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#C9A227" stroke-width="1.2"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>
+      <p style="margin:10px auto 4px;font-weight:500" data-en="Drag & drop a file here" data-hi="फ़ाइल यहाँ खींचकर छोड़ें">Drag &amp; drop a file here</p>
+      <p class="np-muted" data-en="PDF, DOCX, JPG, PNG, Text" data-hi="PDF, DOCX, JPG, PNG, Text">PDF, DOCX, JPG, PNG, Text</p>
+      <button class="btn btn-primary btn-sm" type="button" style="margin-top:12px" data-en="Upload Document" data-hi="दस्तावेज़ अपलोड करें" id="pick">Upload Document</button>
+      <input type="file" id="file" hidden accept=".pdf,.docx,.jpg,.jpeg,.png,.txt" />
+    </div>
+    <div id="progress" style="margin-top:14px"></div>
+    <h3 class="np-h" style="margin-top:24px" data-en="Your documents" data-hi="आपके दस्तावेज़">Your documents</h3>
+    <div id="docList"></div>
+  </aside>
+  <section id="docMain"></section>
+</div>
+
+</div></main>
+<div id="app-footer"></div>
+<script type="module" src="../js/pages/documents.js"></script>
+</body>
+</html>

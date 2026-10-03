@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ask NyayaPath — Explain Your Legal Problem</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖</text></svg>" />
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/pages.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+  <style>
+    body { padding-top: 68px; }
+
+    .ask-page {
+      min-height: calc(100vh - 68px);
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 0;
+    }
+
+    /* LEFT: Input */
+    .ask-left {
+      border-right: 1px solid var(--gold-border);
+      padding: var(--space-2xl) var(--space-2xl) var(--space-2xl);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ask-header { margin-bottom: var(--space-xl); }
+
+    .ask-textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(201,162,39,0.2);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      color: var(--text-ivory);
+      font-size: 1.05rem;
+      font-family: var(--font-devanagari);
+      line-height: 1.9;
+      min-height: 220px;
+      resize: none;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+      flex: 1;
+      margin-bottom: var(--space-md);
+    }
+
+    .ask-textarea:focus {
+      outline: none;
+      border-color: var(--gold-main);
+      box-shadow: 0 0 0 3px rgba(201,162,39,0.08);
+    }
+
+    .ask-textarea::placeholder { color: var(--text-muted); font-size: 0.98rem; }
+
+    .ask-toolbar {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+
+    .ask-submit {
+      display: flex;
+      gap: var(--space-sm);
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .char-count {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+    }
+
+    /* RIGHT: Results panel */
+    .ask-right {
+      padding: var(--space-2xl) var(--space-xl);
+      overflow-y: auto;
+      background: var(--bg-secondary);
+    }
+
+    /* Result state */
+    .result-panel { display: none; }
+    .result-panel.show { display: block; }
+    .initial-panel { }
+    .initial-panel.hide { display: none; }
+
+    /* Analysis result card */
+    .analysis-card {
+      background: var(--bg-dark-brown);
+      border: 1px solid var(--gold-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: var(--space-lg);
+    }
+
+    .analysis-header {
+      background: linear-gradient(135deg, rgba(201,162,39,0.12), rgba(201,162,39,0.04));
+      padding: var(--space-lg);
+      border-bottom: 1px solid var(--gold-border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .analysis-header-icon { color: var(--gold-main); }
+
+    .analysis-header-text {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold-bright);
+    }
+
+    .analysis-body { padding: var(--space-lg); }
+
+    .analysis-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(201,162,39,0.08);
+      gap: var(--space-md);
+    }
+
+    .analysis-row:last-child { border-bottom: none; }
+
+    .analysis-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      flex-shrink: 0;
+      padding-top: 1px;
+    }
+
+    .analysis-value {
+      font-size: 0.88rem;
+      color: var(--text-ivory);
+      text-align: right;
+      font-weight: 500;
+    }
+
+    /* Sources section */
+    .sources-section {
+      margin-top: var(--space-md);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--gold-border);
+    }
+
+    .sources-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-sm);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sources-label::before {
+      content: '';
+      width: 12px;
+      height: 1px;
+      background: var(--gold-antique);
+    }
+
+    /* Loading state */
+    .loading-panel {
+      display: none;
+      padding: var(--space-2xl) var(--space-md);
+      text-align: center;
+    }
+
+    .loading-panel.show { display: block; }
+
+    /* Next steps mini */
+    .mini-steps {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .mini-step {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(201,162,39,0.1);
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+    }
+
+    .mini-step-num {
+      font-family: var(--font-serif);
+      font-size: 0.95rem;
+      color: var(--gold-antique);
+      font-weight: 600;
+      flex-shrink: 0;
+      line-height: 1.4;
+    }
+
+    .mini-step-text {
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    /* Similar judgment card */
+    .similar-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--gold-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-md);
+      margin-bottom: var(--space-sm);
+    }
+
+    .similar-card-title {
+      font-family: var(--font-serif);
+      font-size: 0.92rem;
+      color: var(--text-ivory);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+
+    .similar-card-why {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: var(--space-sm);
+    }
+
+    /* Warning banner */
+    .warn-banner {
+      background: rgba(201,162,39,0.06);
+      border: 1px solid rgba(201,162,39,0.2);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-top: var(--space-md);
+    }
+
+    /* Examples */
+    .examples-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .example-chip {
+      padding: 10px 14px;
+      background: rgba(201,162,39,0.04);
+      border: 1px dashed rgba(201,162,39,0.2);
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      line-height: 1.55;
+      font-family: var(--font-devanagari);
+    }
+
+    .example-chip:hover {
+      border-color: var(--gold-main);
+      color: var(--text-ivory);
+      background: rgba(201,162,39,0.08);
+    }
+
+    @media (max-width: 900px) {
+      .ask-page { grid-template-columns: 1fr; }
+      .ask-left { border-right: none; border-bottom: 1px solid var(--gold-border); padding: var(--space-xl) var(--space-md); }
+      .ask-right { padding: var(--space-xl) var(--space-md); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="../index.html" class="navbar-logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="19" stroke="#C9A227" stroke-width="1.5" fill="none" opacity="0.4"/><line x1="20" y1="8" x2="20" y2="32" stroke="#C9A227" stroke-width="1.8"/><line x1="20" y1="14" x2="10" y2="20" stroke="#C9A227" stroke-width="1.5"/><line x1="20" y1="14" x2="30" y2="20" stroke="#C9A227" stroke-width="1.5"/><ellipse cx="10" cy="21.5" rx="5" ry="2.5" stroke="#C9A227" stroke-width="1.2" fill="rgba(201,162,39,0.15)"/><ellipse cx="30" cy="21.5" rx="5" ry="2.5" stroke="#C9A227" stroke-width="1.2" fill="rgba(201,162,39,0.15)"/><circle cx="20" cy="32" r="2" fill="#C9A227" opacity="0.8"/></svg>
+      </div>
+      <span class="logo-text">NyayaPath</span>
+    </a>
+    <ul class="navbar-nav" id="navMenu">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="ask.html" class="active">Ask NyayaPath</a></li>
+      <li><a href="case.html">My Case</a></li>
+      <li><a href="research.html">Legal Research</a></li>
+      <li><a href="documents.html">Documents</a></li>
+      <li><a href="action-plan.html">Action Plan</a></li>
+      <li><a href="legal-aid.html">Legal Aid</a></li>
+    </ul>
+    <div class="navbar-right">
+      <div class="lang-switcher">
+        <button class="lang-btn" id="langEn" onclick="switchLang('en')">EN</button>
+        <span class="lang-sep">|</span>
+        <button class="lang-btn" id="langHi" onclick="switchLang('hi')">हिं</button>
+      </div>
+      <button class="navbar-hamburger" onclick="document.getElementById('navMenu').classList.toggle('open')"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════ MAIN ══════ -->
+<main>
+  <div class="ask-page">
+
+    <!-- LEFT: Input -->
+    <div class="ask-left">
+      <div class="ask-header">
+        <div class="section-eyebrow" data-en="Legal Intake" data-hi="कानूनी आवेदन">Legal Intake</div>
+        <h2 data-en="Tell NyayaPath what happened" data-hi="NyayaPath को बताएं क्या हुआ">Tell NyayaPath what happened</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: var(--space-sm);"
+           data-en="You don't need legal terminology. Explain the situation in your own words, in Hindi or English."
+           data-hi="कानूनी शब्दावली की जरूरत नहीं है। स्थिति को अपने शब्दों में, हिंदी या English में समझाएं।">
+          You don't need legal terminology. Explain the situation in your own words, in Hindi or English.
+        </p>
+      </div>
+
+      <textarea id="mainInput" class="ask-textarea"
+        placeholder="मेरे पड़ोसी ने मेरी 2 एकड़ जमीन पर कब्जा कर लिया है। मेरा केस 4 साल से pending है…"
+        aria-label="Describe your legal problem" maxlength="3000"></textarea>
+
+      <div class="ask-toolbar">
+        <button class="hero-icon-btn" onclick="startVoice()" style="color:var(--text-muted);" aria-label="Voice input">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          <span data-en="Speak" data-hi="बोलें">Speak</span>
+        </button>
+        <span class="char-count" id="charCount">0 / 3000</span>
+      </div>
+
+      <div class="ask-submit">
+        <button class="btn btn-ghost btn-sm" onclick="clearInput()" data-en="Clear" data-hi="साफ करें">Clear</button>
+        <button class="btn btn-primary btn-lg" id="analyzeBtn" onclick="analyzeInput()" data-en="Analyze My Problem →" data-hi="समस्या का विश्लेषण करें →">Analyze My Problem →</button>
+      </div>
+
+      <!-- Disclaimer -->
+      <div class="warn-banner" style="margin-top: var(--space-lg);">
+        <span data-en="NyayaPath provides legal information and navigation, not legal advice. Always consult a qualified legal professional for your specific situation."
+              data-hi="NyayaPath कानूनी जानकारी और नेविगेशन प्रदान करता है, कानूनी सलाह नहीं। अपनी विशिष्ट स्थिति के लिए हमेशा एक योग्य कानूनी पेशेवर से परामर्श लें।">
+          NyayaPath provides legal information and navigation, not legal advice. Always consult a qualified legal professional for your specific situation.
+        </span>
+      </div>
+    </div>
+
+    <!-- RIGHT: Output -->
+    <div class="ask-right">
+
+      <!-- Initial state -->
+      <div class="initial-panel" id="initialPanel">
+        <div class="section-eyebrow" style="margin-bottom: var(--space-lg);" data-en="Try an example" data-hi="एक उदाहरण आज़माएं">Try an example</div>
+        <div class="examples-list">
+          <div class="example-chip" onclick="useExample(this)">मेरे पड़ोसी ने मेरी 2 एकड़ जमीन पर कब्जा कर लिया है। मेरा केस 4 साल से pending है।</div>
+          <div class="example-chip" onclick="useExample(this)">My landlord is refusing to return the security deposit of ₹80,000 after I vacated the flat.</div>
+          <div class="example-chip" onclick="useExample(this)">मुझे बिना कारण बताए नौकरी से निकाल दिया गया। मैं क्या कर सकता हूं?</div>
+          <div class="example-chip" onclick="useExample(this)">Court has issued a notice but I don't understand what it means. My hearing is next month.</div>
+          <div class="example-chip" onclick="useExample(this)">मेरे पिता की मृत्यु के बाद उनकी संपत्ति को लेकर परिवार में विवाद है।</div>
+        </div>
+
+        <div style="margin-top: var(--space-xl);">
+          <div class="section-eyebrow" style="margin-bottom: var(--space-md);" data-en="What NyayaPath will show you" data-hi="NyayaPath आपको क्या दिखाएगा">What NyayaPath will show you</div>
+          <div class="mini-steps">
+            <div class="mini-step"><div class="mini-step-num">→</div><div class="mini-step-text" data-en="Legal area and issue identified" data-hi="कानूनी क्षेत्र और समस्या की पहचान">Legal area and issue identified</div></div>
+            <div class="mini-step"><div class="mini-step-num">→</div><div class="mini-step-text" data-en="Relevant laws and provisions" data-hi="प्रासंगिक कानून और प्रावधान">Relevant laws and provisions</div></div>
+            <div class="mini-step"><div class="mini-step-num">→</div><div class="mini-step-text" data-en="Similar court judgments" data-hi="समान न्यायालय निर्णय">Similar court judgments</div></div>
+            <div class="mini-step"><div class="mini-step-num">→</div><div class="mini-step-text" data-en="Possible next steps (with sources)" data-hi="संभावित अगले कदम (स्रोतों के साथ)">Possible next steps (with sources)</div></div>
+            <div class="mini-step"><div class="mini-step-num">→</div><div class="mini-step-text" data-en="Document preparation options" data-hi="दस्तावेज़ तैयारी विकल्प">Document preparation options</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading state -->
+      <div class="loading-panel" id="loadingPanel">
+        <div class="loading-dots" style="margin-bottom: var(--space-lg);">
+          <span></span><span></span><span></span>
+        </div>
+        <p style="font-family: var(--font-serif); font-size: 1.1rem; margin-bottom: var(--space-lg); color: var(--text-ivory);"
+           data-en="Analyzing your situation…" data-hi="आपकी स्थिति का विश्लेषण हो रहा है…">Analyzing your situation…</p>
+        <div class="processing-steps" id="processingSteps">
+          <div class="processing-step active" id="ps1">
+            <svg class="processing-step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            <span data-en="Understanding the legal issue…" data-hi="कानूनी समस्या समझ रहे हैं…">Understanding the legal issue…</span>
+          </div>
+          <div class="processing-step" id="ps2">
+            <svg class="processing-step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <span data-en="Searching verified legal sources…" data-hi="सत्यापित कानूनी स्रोत खोज रहे हैं…">Searching verified legal sources…</span>
+          </div>
+          <div class="processing-step" id="ps3">
+            <svg class="processing-step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span data-en="Finding relevant judgments…" data-hi="प्रासंगिक निर्णय खोज रहे हैं…">Finding relevant judgments…</span>
+          </div>
+          <div class="processing-step" id="ps4">
+            <svg class="processing-step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg>
+            <span data-en="Preparing your legal path…" data-hi="आपका कानूनी मार्ग तैयार कर रहे हैं…">Preparing your legal path…</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Result panel -->
+      <div class="result-panel" id="resultPanel">
+
+        <!-- Understanding card -->
+        <div class="analysis-card" id="understandingCard">
+          <div class="analysis-header">
+            <svg class="analysis-header-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <span class="analysis-header-text" data-en="We understood your situation" data-hi="हमने आपकी स्थिति समझी">We understood your situation</span>
+          </div>
+          <div class="analysis-body" id="analysisBody">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+
+        <!-- AI Answer -->
+        <div id="aiAnswerSection" style="margin-bottom: var(--space-lg);"></div>
+
+        <!-- Similar Cases -->
+        <div id="similarSection" style="display:none;">
+          <div class="section-eyebrow" style="margin-bottom: var(--space-md);" data-en="Relevant Judgments" data-hi="प्रासंगिक निर्णय">Relevant Judgments</div>
+          <div id="similarCards"></div>
+          <p id="similarNote" style="font-size: 0.76rem; color: var(--text-muted); margin-top: var(--space-sm); line-height: 1.6;"></p>
+        </div>
+
+        <!-- Next Steps -->
+        <div id="stepsSection" style="display:none; margin-top: var(--space-lg);">
+          <div class="section-eyebrow" style="margin-bottom: var(--space-md);" data-en="Possible Next Steps" data-hi="संभावित अगले कदम">Possible Next Steps</div>
+          <div class="mini-steps" id="nextStepsList"></div>
+          <a href="action-plan.html" class="btn btn-secondary btn-sm" style="margin-top: var(--space-md);"
+             data-en="View Full Action Plan →" data-hi="पूरी कार्य योजना देखें →">View Full Action Plan →</a>
+        </div>
+
+        <!-- CTA buttons -->
+        <div id="resultCTA" style="display:none; margin-top: var(--space-xl); display:flex; gap: var(--space-sm); flex-wrap: wrap;">
+          <a href="result.html" class="btn btn-primary btn-sm" data-en="View My Full NyayaPath" data-hi="मेरा पूरा NyayaPath देखें">View My Full NyayaPath</a>
+          <a href="research.html" class="btn btn-secondary btn-sm" data-en="Legal Research" data-hi="कानूनी शोध">Legal Research</a>
+          <a href="documents.html" class="btn btn-secondary btn-sm" data-en="Upload Documents" data-hi="दस्तावेज़ अपलोड करें">Upload Documents</a>
+          <a href="drafts.html" class="btn btn-secondary btn-sm" data-en="Prepare Draft" data-hi="मसौदा तैयार करें">Prepare Draft</a>
+        </div>
+
+        <!-- Demo notice if applicable -->
+        <div id="demoNotice" class="demo-notice hidden" style="margin-top: var(--space-md);">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span data-en="Some sources shown are demo data. Do not rely on them as real legal authority." data-hi="दिखाए गए कुछ स्रोत डेमो डेटा हैं। इन्हें वास्तविक कानूनी प्राधिकार के रूप में न मानें।">Some sources shown are demo data. Do not rely on them as real legal authority.</span>
+        </div>
+
+        <!-- Error state -->
+        <div id="errorBanner" class="hidden" style="padding: var(--space-lg); background: rgba(224,82,82,0.08); border: 1px solid rgba(224,82,82,0.2); border-radius: var(--radius-md); margin-top: var(--space-md);">
+          <p style="color: #EB5757; font-size: 0.9rem;" id="errorMsg"></p>
+          <button class="btn btn-secondary btn-sm" style="margin-top: var(--space-sm);" onclick="retryAnalysis()" data-en="Try Again" data-hi="फिर कोशिश करें">Try Again</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<!-- ══════ SCRIPTS ══════ -->
+<script type="module">
+  import { AI } from '../js/api/endpoints.js';
+  import { esc, showToast, topicLabel, getLang, setLang } from '../js/utils/helpers.js';
+
+  let currentLang = getLang();
+  let lastInput = '';
+
+  // ── Lang ──
+  window.switchLang = (lang) => {
+    currentLang = lang;
+    setLang(lang);
+    document.querySelectorAll('[data-en]').forEach(el => {
+      const t = el.getAttribute('data-' + lang) || el.getAttribute('data-en');
+      if (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT') el.placeholder = t;
+      else el.innerHTML = t;
+    });
+    document.getElementById('langEn').classList.toggle('active', lang === 'en');
+    document.getElementById('langHi').classList.toggle('active', lang === 'hi');
+  };
+
+  switchLang(currentLang);
+
+  // ── Char count ──
+  document.getElementById('mainInput').addEventListener('input', function() {
+    document.getElementById('charCount').textContent = this.value.length + ' / 3000';
+  });
+
+  // Pre-fill from URL or sessionStorage
+  const urlQ = new URLSearchParams(window.location.search).get('q');
+  const ssQ  = sessionStorage.getItem('nyayapath_intake');
+  if (urlQ) {
+    document.getElementById('mainInput').value = decodeURIComponent(urlQ);
+    document.getElementById('charCount').textContent = urlQ.length + ' / 3000';
+    setTimeout(() => analyzeInput(), 400);
+  } else if (ssQ) {
+    document.getElementById('mainInput').value = ssQ;
+    document.getElementById('charCount').textContent = ssQ.length + ' / 3000';
+    sessionStorage.removeItem('nyayapath_intake');
+  }
+
+  // ── Example chips ──
+  window.useExample = (el) => {
+    document.getElementById('mainInput').value = el.textContent;
+    document.getElementById('charCount').textContent = el.textContent.length + ' / 3000';
+  };
+
+  // ── Clear ──
+  window.clearInput = () => {
+    document.getElementById('mainInput').value = '';
+    document.getElementById('charCount').textContent = '0 / 3000';
+    showInitial();
+  };
+
+  // ── Panels ──
+  function showInitial() {
+    document.getElementById('initialPanel').classList.remove('hide');
+    document.getElementById('loadingPanel').classList.remove('show');
+    document.getElementById('resultPanel').classList.remove('show');
+  }
+
+  function showLoading() {
+    document.getElementById('initialPanel').classList.add('hide');
+    document.getElementById('loadingPanel').classList.add('show');
+    document.getElementById('resultPanel').classList.remove('show');
+    animateProcessing();
+  }
+
+  function showResult() {
+    document.getElementById('loadingPanel').classList.remove('show');
+    document.getElementById('resultPanel').classList.add('show');
+  }
+
+  function animateProcessing() {
+    const steps = ['ps1','ps2','ps3','ps4'];
+    steps.forEach(id => {
+      document.getElementById(id).classList.remove('done','active');
+    });
+    let i = 0;
+    const tick = () => {
+      if (i > 0) document.getElementById(steps[i-1]).classList.replace('active','done');
+      if (i < steps.length) {
+        document.getElementById(steps[i]).classList.add('active');
+        i++;
+        setTimeout(tick, 900);
+      }
+    };
+    tick();
+  }
+
+  // ── Analyze ──
+  window.analyzeInput = async () => {
+    const msg = document.getElementById('mainInput').value.trim();
+    if (msg.length < 5) {
+      showToast(currentLang === 'hi' ? 'कृपया अपनी समस्या का विवरण दें।' : 'Please describe your situation.', 'error');
+      return;
+    }
+    lastInput = msg;
+    document.getElementById('errorBanner').classList.add('hidden');
+    showLoading();
+
+    try {
+      // Chat (works without login - AllowAny)
+      const chatRes = await AI.chat(msg, { language: currentLang });
+      // Similar cases
+      const simRes = await AI.similarCases(msg, { language: currentLang, topK: 4 }).catch(() => null);
+
+      showResult();
+      renderAnalysis(chatRes);
+      if (simRes && simRes.results && simRes.results.length) { renderSimilar(simRes); try { const o = JSON.parse(sessionStorage.getItem('nyayapath_chat')||'{}'); o.similar = simRes; sessionStorage.setItem('nyayapath_chat', JSON.stringify(o)); } catch(_) {} }
+
+    } catch (err) {
+      showResult();
+      document.getElementById('errorBanner').classList.remove('hidden');
+      document.getElementById('errorMsg').textContent = err.message || (currentLang === 'hi'
+        ? 'विश्लेषण करते समय त्रुटि हुई। कृपया पुनः प्रयास करें।'
+        : 'An error occurred while analyzing. Please try again.');
+      // Show partial fallback
+      renderFallback(msg);
+    }
+  };
+
+  window.retryAnalysis = () => analyzeInput();
+
+  function renderAnalysis(res) {
+    const ent = res.entities || {};
+    const intent = { legal_topic: res.detected_intent, state: ent.state, district: ent.district, existing_case: ent.existing_case, case_age_years: ent.case_age_years };
+    const lang = res.language || currentLang;
+
+    // Analysis rows
+    const rows = [
+      { label: lang === 'hi' ? 'कानूनी क्षेत्र' : 'Legal Area',     val: topicLabel(intent.legal_topic, lang) || '—' },
+      { label: lang === 'hi' ? 'राज्य'         : 'State',            val: intent.state || '—' },
+      { label: lang === 'hi' ? 'जिला'          : 'District',         val: intent.district || '—' },
+      { label: lang === 'hi' ? 'मौजूदा केस'   : 'Existing Case',    val: intent.existing_case
+          ? (lang === 'hi' ? 'हां' : 'Yes') : (lang === 'hi' ? 'अज्ञात' : 'Unknown') },
+      { label: lang === 'hi' ? 'केस की आयु'   : 'Case Age',         val: intent.case_age_years ? intent.case_age_years + ' years' : '—' },
+    ].filter(r => r.val && r.val !== '—');
+
+    let html = rows.map(r => `
+      <div class="analysis-row">
+        <span class="analysis-label">${esc(r.label)}</span>
+        <span class="analysis-value">${esc(r.val)}</span>
+      </div>`).join('');
+
+    document.getElementById('analysisBody').innerHTML = html || '<p style="color:var(--text-muted); font-size:.85rem;">Analysis complete.</p>';
+
+    // AI answer
+    if (res.answer) {
+      document.getElementById('aiAnswerSection').innerHTML = `
+        <div class="card" style="margin-bottom: var(--space-md);">
+          <div class="section-eyebrow" style="margin-bottom: var(--space-sm);">
+            ${lang === 'hi' ? 'विश्लेषण' : 'Analysis'}
+          </div>
+          <p style="font-size: 0.9rem; line-height: 1.8; color: var(--text-secondary);">${esc(res.answer)}</p>
+          ${res.verification_status ? `<div class="sources-section">
+            <div class="sources-label">${lang === 'hi' ? 'सत्यापन स्थिति' : 'Verification'}</div>
+            <span class="badge badge-gold">${esc(res.verification_status)}</span>
+          </div>` : ''}
+        </div>`;
+    }
+
+    // Next steps
+    if (res.next_steps && res.next_steps.length) {
+      document.getElementById('stepsSection').style.display = 'block';
+      document.getElementById('nextStepsList').innerHTML = res.next_steps.slice(0, 5).map((s, i) => `
+        <div class="mini-step">
+          <div class="mini-step-num">0${i+1}</div>
+          <div class="mini-step-text">${esc(s.title || s.detail || '')}</div>
+        </div>`).join('');
+    }
+
+    // Demo notice
+    if ((res.warnings||[]).some(w => w.code === 'DEMO_DATA')) {
+      document.getElementById('demoNotice').classList.remove('hidden');
+    }
+
+    // CTA
+    document.getElementById('resultCTA').style.display = 'flex';
+    try { sessionStorage.setItem('nyayapath_chat', JSON.stringify({ chat: res, message: lastInput, lang })); } catch(_) {}
+
+    // Store context for action plan
+    try { sessionStorage.setItem('nyayapath_context', JSON.stringify({ intent, lang, message: lastInput })); } catch(_) {}
+  }
+
+  function renderSimilar(res) {
+    document.getElementById('similarSection').style.display = 'block';
+    const cards = res.results.slice(0, 3).map(r => `
+      <div class="similar-card">
+        <div class="similar-card-title">${esc(r.title || r.judgment_title || 'Judgment')}</div>
+        <div class="similar-card-why">${esc(r.relevance_reason || r.snippet || '')}</div>
+        <div style="display:flex; gap: var(--space-sm); flex-wrap:wrap; align-items: center;">
+          ${r.court ? `<span style="font-size:0.72rem; color:var(--text-muted);">${esc(r.court)}</span>` : ''}
+          ${r.date ? `<span style="font-size:0.72rem; color:var(--text-muted);">· ${esc(r.date)}</span>` : ''}
+          ${r.source_url ? `<a href="${esc(r.source_url)}" target="_blank" rel="noopener" class="source-card" style="font-size:0.72rem;">⚖ Source →</a>` : ''}
+        </div>
+      </div>`).join('');
+    document.getElementById('similarCards').innerHTML = cards;
+    if (res.similarity_note) document.getElementById('similarNote').textContent = res.similarity_note;
+  }
+
+  function renderFallback(msg) {
+    document.getElementById('analysisBody').innerHTML = `
+      <div class="analysis-row">
+        <span class="analysis-label">Input received</span>
+        <span class="analysis-value" style="text-align:left; max-width: 200px; font-size: 0.8rem; color: var(--text-muted);">${esc(msg.slice(0, 80))}…</span>
+      </div>`;
+    document.getElementById('resultCTA').style.display = 'flex';
+  }
+
+  // ── Voice ──
+  window.startVoice = () => {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      showToast('Voice input not supported in this browser', 'error'); return;
+    }
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const r = new SR();
+    r.lang = currentLang === 'hi' ? 'hi-IN' : 'en-IN';
+    r.onresult = e => { document.getElementById('mainInput').value += e.results[0][0].transcript; };
+    r.start();
+    showToast(currentLang === 'hi' ? 'सुन रहे हैं…' : 'Listening…', 'info', 2500);
+  };
+</script>
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Legal Aid — NyayaPath</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖</text></svg>" />
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/pages.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+</head>
+<body>
+<div id="app-nav"></div>
+<main class="np-page"><div class="container">
+
+<div class="np-page-head">
+  <div class="section-eyebrow" data-en="LEGAL AID" data-hi="कानूनी सहायता">LEGAL AID</div>
+  <h1 data-en="Need Legal Help?" data-hi="कानूनी मदद चाहिए?">Need Legal Help?</h1>
+  <p data-en="NyayaPath provides legal information and navigation, not legal representation. These official resources can help you reach legal aid." data-hi="NyayaPath कानूनी जानकारी और मार्गदर्शन देता है, कानूनी प्रतिनिधित्व नहीं। ये आधिकारिक संसाधन आपको कानूनी सहायता तक पहुँचने में मदद कर सकते हैं।">NyayaPath provides legal information and navigation, not legal representation.</p>
+</div>
+<h2 class="np-h" data-en="Official national resources" data-hi="आधिकारिक राष्ट्रीय संसाधन">Official national resources</h2>
+<div class="np-disclaimer" data-en="These links are fixed official portals, not data from the NyayaPath database. Please verify contact details on the official website before use." data-hi="ये निश्चित आधिकारिक पोर्टल हैं, NyayaPath डेटाबेस का डेटा नहीं। उपयोग से पहले आधिकारिक वेबसाइट पर संपर्क विवरण सत्यापित करें।">These links are fixed official portals, not data from the NyayaPath database. Please verify contact details on the official website before use.</div>
+<div class="np-grid cols-3" id="national"></div>
+<hr class="np-divider" />
+<h2 class="np-h" data-en="Courts in our records" data-hi="हमारे रिकॉर्ड में न्यायालय">Courts in our records</h2>
+<div class="np-filters" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))"><input id="cState" class="form-input" data-en="State" data-hi="राज्य" placeholder="State" aria-label="State" /><input id="cQ" class="form-input" data-en="Court name" data-hi="न्यायालय का नाम" placeholder="Court name" aria-label="Court name" /><button class="btn btn-primary" id="cGo" data-en="Find Courts" data-hi="न्यायालय खोजें">Find Courts</button></div>
+<div id="courts" class="np-grid cols-2"></div>
+<div id="cPager"></div>
+
+</div></main>
+<div id="app-footer"></div>
+<script type="module" src="../js/pages/legal-aid.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+.git
+.env
+.venv
+__pycache__
+*.pyc
+private_media
+private_media_test
+staticfiles
+.pytest_cache
+frontend
+deploy
+*.whl

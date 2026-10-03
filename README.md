@@ -30,3 +30,11 @@ Docs: `/api/v1/docs/` (Swagger), `/api/v1/schema/`. Responses: `{success, data, 
 
 ## AI provider
 `AI_PROVIDER=mock` (offline, default) or `gemini` (set GEMINI_API_KEY). Tests/dev never need an API key.
+
+## Run with Docker (backend + frontend + DB)
+```
+git clone https://github.com/abhaysahu403/NYAYAPATH.git && cd NYAYAPATH
+docker compose up -d --build
+```
+Open `http://<host>/` (nginx serves `frontend/` and proxies `/api/` to Django). Demo login is auto-seeded.
+For real use: set `.env` (copy `.env.example`), `AI_PROVIDER=gemini`, `GEMINI_API_KEY`, a strong `SECRET_KEY`, explicit `ALLOWED_HOSTS`.

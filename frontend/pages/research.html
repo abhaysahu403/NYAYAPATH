@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Legal Research — NyayaPath</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖</text></svg>" />
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/pages.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+</head>
+<body>
+<div id="app-nav"></div>
+<main class="np-page"><div class="container">
+
+<div class="np-page-head">
+  <div class="section-eyebrow" data-en="LEGAL RESEARCH" data-hi="कानूनी शोध">LEGAL RESEARCH</div>
+  <h1 data-en="Search Indian Legal Information" data-hi="भारतीय कानूनी जानकारी खोजें">Search Indian Legal Information</h1>
+  <p data-en="Results come from the sources stored in NyayaPath, not live court systems. Always open the original source to verify." data-hi="परिणाम NyayaPath में संग्रहीत स्रोतों से आते हैं, लाइव न्यायालय प्रणाली से नहीं। सत्यापन के लिए मूल स्रोत अवश्य खोलें।">Results come from the sources stored in NyayaPath, not live court systems. Always open the original source to verify.</p>
+</div>
+<form id="searchForm" class="np-noprint" role="search">
+  <div class="search-bar"><input id="q" class="form-input" type="search" aria-label="Search" data-en="Search cases, judgments, legal topics..." data-hi="केस, निर्णय, कानूनी विषय खोजें..." placeholder="Search cases, judgments, legal topics..." />
+  <button class="search-bar-btn btn btn-primary" type="submit" data-en="Search" data-hi="खोजें">Search</button></div>
+  <div class="np-filters">
+    <select id="fTopic" class="form-select" aria-label="Legal topic"><option value="" data-en="Legal topic (any)" data-hi="कानूनी विषय (कोई भी)">Legal topic (any)</option></select>
+    <input id="fState" class="form-input" data-en="State" data-hi="राज्य" placeholder="State" aria-label="State" />
+    <input id="fCourt" class="form-input" data-en="Court" data-hi="न्यायालय" placeholder="Court" aria-label="Court" />
+    <input id="fDistrict" class="form-input" data-en="District" data-hi="जिला" placeholder="District" aria-label="District" />
+    <input id="fFrom" class="form-input" type="date" aria-label="From date" />
+    <input id="fTo" class="form-input" type="date" aria-label="To date" />
+    <select id="fSource" class="form-select" aria-label="Source type"><option value="" data-en="Source type (any)" data-hi="स्रोत प्रकार (कोई भी)">Source type (any)</option>
+      <option value="JUDGMENT" data-en="Judgment" data-hi="निर्णय">Judgment</option><option value="GOVERNMENT" data-en="Government" data-hi="सरकारी">Government</option>
+      <option value="LEGAL_INFORMATION" data-en="Legal information" data-hi="कानूनी जानकारी">Legal information</option><option value="OFFICIAL_COURT" data-en="Court record" data-hi="न्यायालय रिकॉर्ड">Court record</option></select>
+  </div>
+  <div class="np-disclaimer" id="relNote" data-en="Relevance labels show how closely a result matched your search words and meaning. They are not a measure of legal similarity." data-hi="प्रासंगिकता लेबल केवल यह दर्शाते हैं कि परिणाम आपकी खोज से कितना मेल खाता है। यह कानूनी समानता का माप नहीं है।">Relevance labels show how closely a result matched your search words and meaning. They are not a measure of legal similarity.</div>
+</form>
+<div id="results" aria-live="polite"></div>
+<hr class="np-divider" />
+<h2 class="np-h" data-en="Recent Judgments in the Library" data-hi="लाइब्रेरी में हाल के निर्णय">Recent Judgments in the Library</h2>
+<p class="np-muted" data-en="Shown from stored records with their date and source. This is not a live news feed." data-hi="संग्रहीत रिकॉर्ड, तिथि और स्रोत सहित। यह लाइव समाचार फ़ीड नहीं है।">Shown from stored records with their date and source. This is not a live news feed.</p>
+<div id="recent" class="np-grid cols-2" style="margin-top:16px"></div>
+<div class="modal-overlay" id="explainModal" role="dialog" aria-modal="true" aria-labelledby="exTitle"><div class="np-modal" style="width:min(720px,100%)"><div class="np-between"><h3 id="exTitle" data-en="Explain This Case" data-hi="इस केस को समझें">Explain This Case</h3><button class="btn btn-ghost btn-sm" onclick="closeExplain()" aria-label="Close">✕</button></div><div id="exBody"></div></div></div>
+
+</div></main>
+<div id="app-footer"></div>
+<script type="module" src="../js/pages/research.js"></script>
+</body>
+</html>

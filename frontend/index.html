@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NyayaPath — Your Legal Path, Made Clear</title>
+  <meta name="description" content="AI-powered legal case navigation and legal information for Indian citizens. Explain your problem in Hindi or English." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖</text></svg>" />
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <style>
+    /* ── Page-specific styles ── */
+    .hero-section {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding-top: 68px;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('assets/images/lady-justice.png');
+      background-size: cover;
+      background-position: center 30%;
+      z-index: 0;
+    }
+
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        105deg,
+        rgba(23,21,19,0.97) 0%,
+        rgba(23,21,19,0.88) 50%,
+        rgba(23,21,19,0.60) 100%
+      );
+    }
+
+    .hero-bg-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 70% 50%, rgba(201,162,39,0.07) 0%, transparent 70%);
+      z-index: 1;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      padding: var(--space-3xl) 0 var(--space-2xl);
+    }
+
+    .hero-content {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: var(--space-3xl);
+      align-items: center;
+    }
+
+    .hero-text { }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold-main);
+      margin-bottom: var(--space-lg);
+    }
+
+    .hero-eyebrow-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--gold-main);
+    }
+
+    .hero-h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      font-weight: 600;
+      color: var(--text-ivory);
+      line-height: 1.12;
+      margin-bottom: var(--space-lg);
+    }
+
+    .hero-h1 em {
+      font-style: italic;
+      color: var(--gold-bright);
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      color: rgba(247,242,232,0.72);
+      line-height: 1.75;
+      max-width: 52ch;
+      margin-bottom: var(--space-xl);
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+    }
+
+    /* Hero input panel */
+    .hero-input-panel {
+      background: rgba(33,29,25,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--gold-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      box-shadow: var(--shadow-deep);
+    }
+
+    .hero-input-label {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      color: var(--text-ivory);
+      margin-bottom: var(--space-md);
+      font-weight: 500;
+    }
+
+    .hero-textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,162,39,0.25);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      color: var(--text-ivory);
+      font-size: 0.98rem;
+      font-family: var(--font-devanagari);
+      line-height: 1.85;
+      min-height: 130px;
+      resize: none;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+      margin-bottom: var(--space-md);
+    }
+
+    .hero-textarea:focus {
+      outline: none;
+      border-color: var(--gold-main);
+      box-shadow: 0 0 0 3px rgba(201,162,39,0.1);
+    }
+
+    .hero-textarea::placeholder { color: var(--text-muted); }
+
+    .hero-input-actions {
+      display: flex;
+      gap: var(--space-sm);
+      align-items: center;
+    }
+
+    .hero-sub-actions {
+      display: flex;
+      gap: var(--space-sm);
+      flex: 1;
+    }
+
+    .hero-icon-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-sm);
+      color: rgba(247,242,232,0.6);
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      font-family: var(--font-sans);
+    }
+
+    .hero-icon-btn:hover {
+      border-color: var(--gold-border);
+      color: var(--gold-bright);
+    }
+
+    /* Trust strip */
+    .trust-strip {
+      position: relative;
+      z-index: 2;
+      border-top: 1px solid var(--gold-border);
+      background: rgba(23,21,19,0.9);
+      padding: var(--space-md) 0;
+    }
+
+    .trust-strip-items {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xl);
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: rgba(247,242,232,0.55);
+      white-space: nowrap;
+    }
+
+    .trust-item svg { color: var(--gold-antique); }
+
+    .trust-sep {
+      width: 1px;
+      height: 18px;
+      background: var(--gold-border);
+    }
+
+    /* Quick actions */
+    .quick-actions-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-md);
+    }
+
+    /* How it works */
+    .how-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-lg);
+      position: relative;
+    }
+
+    .how-steps::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      left: 10%;
+      right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-border), var(--gold-border), transparent);
+    }
+
+    .how-step {
+      text-align: center;
+      padding: var(--space-lg) var(--space-md);
+      position: relative;
+      z-index: 1;
+    }
+
+    .how-step-num {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--bg-secondary);
+      border: 1px solid var(--gold-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto var(--space-md);
+      color: var(--gold-main);
+      font-family: var(--font-serif);
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .how-step-title {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      color: var(--text-ivory);
+      margin-bottom: 6px;
+    }
+
+    .how-step-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* Featured section */
+    .featured-section {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+      min-height: 440px;
+      display: flex;
+      align-items: center;
+    }
+
+    .featured-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('assets/images/india-gavel.png');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .featured-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(23,21,19,0.97) 45%, rgba(23,21,19,0.5) 100%);
+    }
+
+    .featured-content {
+      position: relative;
+      z-index: 1;
+      padding: var(--space-3xl);
+      max-width: 580px;
+    }
+
+    .featured-quote {
+      font-family: var(--font-serif);
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 500;
+      color: var(--text-ivory);
+      line-height: 1.35;
+      margin-bottom: var(--space-lg);
+    }
+
+    .featured-quote em { color: var(--gold-bright); font-style: italic; }
+
+    /* Legal categories */
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-sm);
+    }
+
+    .category-chip {
+      padding: 10px 16px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--gold-border);
+      border-radius: var(--radius-md);
+      font-size: 0.83rem;
+      color: rgba(247,242,232,0.7);
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      text-decoration: none;
+      display: block;
+    }
+
+    .category-chip:hover {
+      border-color: var(--gold-main);
+      color: var(--gold-bright);
+      background: rgba(201,162,39,0.06);
+    }
+
+    /* Section with dark bg */
+    .section-dark {
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--gold-border);
+      border-bottom: 1px solid var(--gold-border);
+    }
+
+    @media (max-width: 1024px) {
+      .how-steps { grid-template-columns: repeat(2, 1fr); }
+      .how-steps::before { display: none; }
+      .categories-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .quick-actions-grid { grid-template-columns: 1fr 1fr; }
+      .how-steps { grid-template-columns: 1fr 1fr; }
+      .categories-grid { grid-template-columns: repeat(2, 1fr); }
+      .featured-content { padding: var(--space-xl); }
+      .hero-input-panel { display: none; }
+    }
+
+    @media (max-width: 480px) {
+      .quick-actions-grid { grid-template-columns: 1fr; }
+      .categories-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     NAVBAR
+══════════════════════════════════════════ -->
+<nav class="navbar" role="navigation" aria-label="Main navigation">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-logo" aria-label="NyayaPath Home">
+      <div class="logo-icon">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="19" stroke="#C9A227" stroke-width="1.5" fill="none" opacity="0.4"/>
+          <line x1="20" y1="8" x2="20" y2="32" stroke="#C9A227" stroke-width="1.8"/>
+          <line x1="20" y1="14" x2="10" y2="20" stroke="#C9A227" stroke-width="1.5"/>
+          <line x1="20" y1="14" x2="30" y2="20" stroke="#C9A227" stroke-width="1.5"/>
+          <ellipse cx="10" cy="21.5" rx="5" ry="2.5" stroke="#C9A227" stroke-width="1.2" fill="rgba(201,162,39,0.15)"/>
+          <ellipse cx="30" cy="21.5" rx="5" ry="2.5" stroke="#C9A227" stroke-width="1.2" fill="rgba(201,162,39,0.15)"/>
+          <circle cx="20" cy="32" r="2" fill="#C9A227" opacity="0.8"/>
+        </svg>
+      </div>
+      <div>
+        <span class="logo-text">NyayaPath</span>
+        <span class="logo-tagline" data-en="Your legal path, made clear" data-hi="आपका कानूनी मार्ग, स्पष्ट">Your legal path, made clear</span>
+      </div>
+    </a>
+
+    <ul class="navbar-nav" id="navMenu">
+      <li><a href="index.html" class="active" data-en="Home" data-hi="मुख्य पृष्ठ">Home</a></li>
+      <li><a href="pages/ask.html" data-en="Ask NyayaPath" data-hi="NyayaPath से पूछें">Ask NyayaPath</a></li>
+      <li><a href="pages/case.html" data-en="My Case" data-hi="मेरा केस">My Case</a></li>
+      <li><a href="pages/research.html" data-en="Legal Research" data-hi="कानूनी शोध">Legal Research</a></li>
+      <li><a href="pages/documents.html" data-en="Documents" data-hi="दस्तावेज़">Documents</a></li>
+      <li><a href="pages/action-plan.html" data-en="Action Plan" data-hi="कार्य योजना">Action Plan</a></li>
+      <li><a href="pages/legal-aid.html" data-en="Legal Aid" data-hi="कानूनी सहायता">Legal Aid</a></li>
+    </ul>
+
+    <div class="navbar-right">
+      <div class="lang-switcher" aria-label="Language switcher">
+        <button class="lang-btn" id="langEn" onclick="switchLang('en')" aria-label="Switch to English">EN</button>
+        <span class="lang-sep">|</span>
+        <button class="lang-btn" id="langHi" onclick="switchLang('hi')" aria-label="हिंदी में बदलें">हिं</button>
+      </div>
+      <a href="pages/ask.html" class="btn btn-primary btn-sm" data-en="Start Your Case" data-hi="केस शुरू करें">Start Your Case</a>
+      <button class="navbar-hamburger" id="hamburger" aria-label="Toggle menu" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════
+     HERO
+══════════════════════════════════════════ -->
+<section class="hero-section" aria-labelledby="heroHeading">
+  <div class="hero-bg"></div>
+  <div class="hero-bg-glow"></div>
+
+  <div class="hero-inner container">
+    <div class="hero-content">
+      <div class="hero-text">
+        <div class="hero-eyebrow">
+          <span class="hero-eyebrow-dot"></span>
+          <span data-en="AI-Powered Indian Legal Navigation" data-hi="AI-संचालित भारतीय कानूनी नेविगेशन">AI-Powered Indian Legal Navigation</span>
+        </div>
+
+        <h1 class="hero-h1" id="heroHeading">
+          <span data-en="Your legal problem <em>has a path.</em>" data-hi="आपकी कानूनी समस्या का <em>एक रास्ता है।</em>">
+            Your legal problem <em>has a path.</em>
+          </span>
+        </h1>
+
+        <p class="hero-sub" data-en="Explain your situation in Hindi or English. NyayaPath helps you understand your case, discover relevant judgments and laws, organize your documents, and prepare your next steps."
+           data-hi="अपनी स्थिति हिंदी या English में बताएं। NyayaPath आपके केस को समझने, प्रासंगिक निर्णयों और कानूनों को खोजने, दस्तावेज़ों को व्यवस्थित करने और अगले कदम तैयार करने में मदद करता है।">
+          Explain your situation in Hindi or English. NyayaPath helps you understand your case, discover relevant judgments and laws, organize your documents, and prepare your next steps.
+        </p>
+
+        <div class="hero-actions">
+          <a href="pages/ask.html" class="btn btn-primary btn-lg" data-en="Explain My Problem" data-hi="अपनी समस्या बताएं">Explain My Problem</a>
+          <a href="pages/research.html" class="btn btn-secondary btn-lg" data-en="Search Legal Information" data-hi="कानूनी जानकारी खोजें">Search Legal Information</a>
+        </div>
+      </div>
+
+      <!-- Mini intake on hero -->
+      <div class="hero-input-panel" aria-label="Quick legal intake">
+        <p class="hero-input-label" data-en="Tell NyayaPath what happened" data-hi="NyayaPath को बताएं क्या हुआ">Tell NyayaPath what happened</p>
+        <textarea id="heroInput" class="hero-textarea" rows="5"
+          placeholder="अपनी कानूनी समस्या हिंदी या English में बताएं…"
+          aria-label="Describe your legal problem"></textarea>
+        <div class="hero-input-actions">
+          <div class="hero-sub-actions">
+            <button class="hero-icon-btn" onclick="startVoice()" aria-label="Voice input">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+              <span data-en="Speak" data-hi="बोलें">Speak</span>
+            </button>
+          </div>
+          <button class="btn btn-primary" onclick="submitHeroInput()" data-en="Understand My Case" data-hi="केस समझें">Understand My Case</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trust strip -->
+  <div class="trust-strip">
+    <div class="container">
+      <div class="trust-strip-items">
+        <div class="trust-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span data-en="Indian Legal Information" data-hi="भारतीय कानूनी जानकारी">Indian Legal Information</span>
+        </div>
+        <div class="trust-sep"></div>
+        <div class="trust-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span data-en="Verified Sources" data-hi="सत्यापित स्रोत">Verified Sources</span>
+        </div>
+        <div class="trust-sep"></div>
+        <div class="trust-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span data-en="Hindi + English" data-hi="हिंदी + English">Hindi + English</span>
+        </div>
+        <div class="trust-sep"></div>
+        <div class="trust-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <span data-en="Case Navigation" data-hi="केस नेविगेशन">Case Navigation</span>
+        </div>
+        <div class="trust-sep"></div>
+        <div class="trust-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span data-en="Citizen First" data-hi="नागरिक प्रथम">Citizen First</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     QUICK ACTION CARDS
+══════════════════════════════════════════ -->
+<section class="section" aria-labelledby="actionsHeading">
+  <div class="container">
+    <div class="section-eyebrow" data-en="What can we help with?" data-hi="हम किसमें मदद कर सकते हैं?">What can we help with?</div>
+    <h2 id="actionsHeading" style="margin-bottom: var(--space-xl);"
+        data-en="Choose your starting point" data-hi="अपना प्रारंभिक बिंदु चुनें">Choose your starting point</h2>
+
+    <div class="quick-actions-grid">
+      <a href="pages/ask.html" class="action-card">
+        <svg class="action-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+          <path d="M11 8v3l2 1"/>
+        </svg>
+        <div class="action-card-title" data-en="Understand My Case" data-hi="अपना केस समझें">Understand My Case</div>
+        <div class="action-card-desc" data-en="Check case status, timeline and important events in clear language." data-hi="केस की स्थिति, समयरेखा और महत्वपूर्ण घटनाएं स्पष्ट भाषा में जानें।">Check case status, timeline and important events in clear language.</div>
+        <div class="action-card-arrow">→</div>
+      </a>
+
+      <a href="pages/research.html" class="action-card">
+        <svg class="action-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+        </svg>
+        <div class="action-card-title" data-en="Find Similar Cases" data-hi="समान केस खोजें">Find Similar Cases</div>
+        <div class="action-card-desc" data-en="Discover relevant judgments and legal precedents from Indian courts." data-hi="भारतीय न्यायालयों के प्रासंगिक निर्णय और कानूनी मिसाल खोजें।">Discover relevant judgments and legal precedents from Indian courts.</div>
+        <div class="action-card-arrow">→</div>
+      </a>
+
+      <a href="pages/documents.html" class="action-card">
+        <svg class="action-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/>
+          <line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+        <div class="action-card-title" data-en="Understand a Court Order" data-hi="न्यायालय आदेश समझें">Understand a Court Order</div>
+        <div class="action-card-desc" data-en="Upload an order, notice or judgment and get a plain-language explanation." data-hi="आदेश, नोटिस या निर्णय अपलोड करें और सरल भाषा में स्पष्टीकरण प्राप्त करें।">Upload an order, notice or judgment and get a plain-language explanation.</div>
+        <div class="action-card-arrow">→</div>
+      </a>
+
+      <a href="pages/action-plan.html" class="action-card">
+        <svg class="action-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+        </svg>
+        <div class="action-card-title" data-en="Find My Next Steps" data-hi="अगले कदम जानें">Find My Next Steps</div>
+        <div class="action-card-desc" data-en="Turn your case information into an organized, step-by-step action plan." data-hi="अपनी केस जानकारी को संगठित, चरणबद्ध कार्य योजना में बदलें।">Turn your case information into an organized, step-by-step action plan.</div>
+        <div class="action-card-arrow">→</div>
+      </a>
+
+      <a href="pages/drafts.html" class="action-card">
+        <svg class="action-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+        </svg>
+        <div class="action-card-title" data-en="Prepare a Document" data-hi="दस्तावेज़ तैयार करें">Prepare a Document</div>
+        <div class="action-card-desc" data-en="Create a case summary, RTI request, or lawyer consultation brief." data-hi="केस सारांश, RTI अनुरोध, या वकील परामर्श संक्षिप्त विवरण बनाएं।">Create a case summary, RTI request, or lawyer consultation brief.</div>
+        <div class="action-card-arrow">→</div>
+      </a>
+
+      <a href="pages/legal-aid.html" class="action-card">
+        <svg class="action-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        <div class="action-card-title" data-en="Find Legal Aid" data-hi="कानूनी सहायता पाएं">Find Legal Aid</div>
+        <div class="action-card-desc" data-en="Find relevant legal aid organizations and free legal resources near you." data-hi="अपने पास प्रासंगिक कानूनी सहायता संगठन और मुफ्त कानूनी संसाधन खोजें।">Find relevant legal aid organizations and free legal resources near you.</div>
+        <div class="action-card-arrow">→</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     FEATURED — Story / Philosophy
+══════════════════════════════════════════ -->
+<section class="section-sm section-dark">
+  <div class="container">
+    <div class="featured-section">
+      <div class="featured-bg"></div>
+      <div class="featured-content">
+        <div class="section-eyebrow" data-en="Why NyayaPath" data-hi="NyayaPath क्यों">Why NyayaPath</div>
+        <p class="featured-quote" data-en="A legal problem <em>shouldn't become</em> a lifetime of confusion."
+           data-hi="एक कानूनी समस्या <em>जीवन भर की</em> उलझन नहीं बननी चाहिए।">
+          A legal problem <em>shouldn't become</em> a lifetime of confusion.
+        </p>
+        <p style="font-size: 0.92rem; color: rgba(247,242,232,0.65); line-height: 1.8; max-width: 44ch; margin-bottom: var(--space-lg);"
+           data-en="NyayaPath exists so that ordinary citizens can understand what is happening in their case, what the law says, and what their possible next steps are — without needing a law degree first."
+           data-hi="NyayaPath इसलिए है ताकि आम नागरिक यह समझ सकें कि उनके केस में क्या हो रहा है, कानून क्या कहता है, और उनके संभावित अगले कदम क्या हैं — बिना पहले कानून की डिग्री लिए।">
+          NyayaPath exists so that ordinary citizens can understand what is happening in their case, what the law says, and what their possible next steps are — without needing a law degree first.
+        </p>
+        <a href="pages/ask.html" class="btn btn-primary" data-en="Start Understanding" data-hi="समझना शुरू करें">Start Understanding</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     HOW IT WORKS
+══════════════════════════════════════════ -->
+<section class="section" aria-labelledby="howHeading">
+  <div class="container">
+    <div class="text-center" style="margin-bottom: var(--space-2xl);">
+      <div class="section-eyebrow" style="justify-content: center;" data-en="The Process" data-hi="प्रक्रिया">The Process</div>
+      <h2 id="howHeading" data-en="How NyayaPath works" data-hi="NyayaPath कैसे काम करता है">How NyayaPath works</h2>
+    </div>
+
+    <div class="how-steps">
+      <div class="how-step">
+        <div class="how-step-num">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="how-step-title" data-en="You describe the problem" data-hi="आप समस्या बताते हैं">You describe the problem</div>
+        <div class="how-step-desc" data-en="In Hindi or English, in your own words. No legal terminology needed." data-hi="हिंदी या English में, अपने शब्दों में। कोई कानूनी शब्दावली की जरूरत नहीं।">In Hindi or English, in your own words. No legal terminology needed.</div>
+      </div>
+
+      <div class="how-step">
+        <div class="how-step-num">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        </div>
+        <div class="how-step-title" data-en="NyayaPath understands" data-hi="NyayaPath समझता है">NyayaPath understands</div>
+        <div class="how-step-desc" data-en="AI identifies the legal area, relevant laws, and your possible situation." data-hi="AI कानूनी क्षेत्र, प्रासंगिक कानून और आपकी संभावित स्थिति की पहचान करता है।">AI identifies the legal area, relevant laws, and your possible situation.</div>
+      </div>
+
+      <div class="how-step">
+        <div class="how-step-num">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div class="how-step-title" data-en="Sources are shown" data-hi="स्रोत दिखाए जाते हैं">Sources are shown</div>
+        <div class="how-step-desc" data-en="Every piece of legal information is traced to a verifiable source. You always know where it came from." data-hi="हर कानूनी जानकारी एक सत्यापन योग्य स्रोत से जुड़ी होती है। आप हमेशा जानते हैं यह कहाँ से आई।">Every piece of legal information is traced to a verifiable source. You always know where it came from.</div>
+      </div>
+
+      <div class="how-step">
+        <div class="how-step-num">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </div>
+        <div class="how-step-title" data-en="Next steps are organized" data-hi="अगले कदम व्यवस्थित होते हैं">Next steps are organized</div>
+        <div class="how-step-desc" data-en="Possible next steps, relevant documents, and preparation support — ready to review." data-hi="संभावित अगले कदम, प्रासंगिक दस्तावेज़, और तैयारी समर्थन — समीक्षा के लिए तैयार।">Possible next steps, relevant documents, and preparation support — ready to review.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     LEGAL CATEGORIES
+══════════════════════════════════════════ -->
+<section class="section section-dark" aria-labelledby="categoriesHeading">
+  <div class="container">
+    <div class="section-eyebrow" data-en="Legal Areas" data-hi="कानूनी क्षेत्र">Legal Areas</div>
+    <h2 id="categoriesHeading" style="margin-bottom: var(--space-xl);"
+        data-en="Find information by area of law" data-hi="कानून के क्षेत्र के अनुसार जानकारी खोजें">Find information by area of law</h2>
+
+    <div class="categories-grid">
+      <a href="pages/research.html?topic=LAND_DISPUTE" class="category-chip" data-en="Land & Property" data-hi="भूमि और संपत्ति">Land &amp; Property</a>
+      <a href="pages/research.html?topic=CRIMINAL_CASE" class="category-chip" data-en="Criminal Cases" data-hi="आपराधिक मामले">Criminal Cases</a>
+      <a href="pages/research.html?topic=FAMILY_DISPUTE" class="category-chip" data-en="Family Disputes" data-hi="पारिवारिक विवाद">Family Disputes</a>
+      <a href="pages/research.html?topic=CONSUMER_DISPUTE" class="category-chip" data-en="Consumer Rights" data-hi="उपभोक्ता अधिकार">Consumer Rights</a>
+      <a href="pages/research.html?topic=LABOUR_DISPUTE" class="category-chip" data-en="Labour & Employment" data-hi="श्रम और रोजगार">Labour &amp; Employment</a>
+      <a href="pages/research.html?topic=BAIL" class="category-chip" data-en="Bail & Custody" data-hi="जमानत और हिरासत">Bail &amp; Custody</a>
+      <a href="pages/research.html?topic=RTI" class="category-chip" data-en="RTI / Information Rights" data-hi="RTI / सूचना अधिकार">RTI / Information Rights</a>
+      <a href="pages/research.html?topic=CASE_PENDENCY" class="category-chip" data-en="Long-Pending Cases" data-hi="लंबे समय से लंबित केस">Long-Pending Cases</a>
+      <a href="pages/research.html?topic=MOTOR_ACCIDENT" class="category-chip" data-en="Motor Accidents" data-hi="मोटर दुर्घटना">Motor Accidents</a>
+      <a href="pages/research.html?topic=CONSTITUTIONAL" class="category-chip" data-en="Constitutional Rights" data-hi="संवैधानिक अधिकार">Constitutional Rights</a>
+      <a href="pages/research.html?topic=GOVERNMENT_SERVICE" class="category-chip" data-en="Government Services" data-hi="सरकारी सेवाएं">Government Services</a>
+      <a href="pages/research.html?topic=OTHER" class="category-chip" data-en="Other Legal Matters" data-hi="अन्य कानूनी मामले">Other Legal Matters</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     DISCLAIMER / TRUST
+══════════════════════════════════════════ -->
+<section class="section-sm">
+  <div class="container">
+    <div class="card" style="display:flex; gap: var(--space-lg); align-items: flex-start;">
+      <div style="color: var(--gold-main); flex-shrink:0; margin-top: 2px;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <div>
+        <h4 style="margin-bottom: 6px; font-size: 1rem;" data-en="About NyayaPath's information" data-hi="NyayaPath की जानकारी के बारे में">About NyayaPath's information</h4>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.75; max-width: 72ch;"
+           data-en="NyayaPath provides legal information and case navigation assistance. It is not a substitute for advice from a qualified legal professional. All information should be independently verified before being relied upon. NyayaPath does not represent that any information constitutes legal advice."
+           data-hi="NyayaPath कानूनी जानकारी और केस नेविगेशन सहायता प्रदान करता है। यह एक योग्य कानूनी पेशेवर की सलाह का विकल्प नहीं है। किसी भी जानकारी पर भरोसा करने से पहले उसे स्वतंत्र रूप से सत्यापित किया जाना चाहिए।">
+          NyayaPath provides legal information and case navigation assistance. It is not a substitute for advice from a qualified legal professional. All information should be independently verified before being relied upon. NyayaPath does not represent that any information constitutes legal advice.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════ -->
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo-text">NyayaPath</div>
+        <div class="india-stripe"><div class="india-stripe-saffron"></div><div class="india-stripe-white"></div><div class="india-stripe-green"></div></div>
+        <p class="footer-desc" data-en="AI-powered legal information and case navigation for Indian citizens. In Hindi and English." data-hi="भारतीय नागरिकों के लिए AI-संचालित कानूनी जानकारी और केस नेविगेशन। हिंदी और English में।">AI-powered legal information and case navigation for Indian citizens. In Hindi and English.</p>
+      </div>
+      <div>
+        <div class="footer-heading" data-en="Navigate" data-hi="नेविगेट करें">Navigate</div>
+        <ul class="footer-links">
+          <li><a href="pages/ask.html" data-en="Ask NyayaPath" data-hi="NyayaPath से पूछें">Ask NyayaPath</a></li>
+          <li><a href="pages/research.html" data-en="Legal Research" data-hi="कानूनी शोध">Legal Research</a></li>
+          <li><a href="pages/documents.html" data-en="Documents" data-hi="दस्तावेज़">Documents</a></li>
+          <li><a href="pages/action-plan.html" data-en="Action Plan" data-hi="कार्य योजना">Action Plan</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading" data-en="Support" data-hi="सहायता">Support</div>
+        <ul class="footer-links">
+          <li><a href="pages/legal-aid.html" data-en="Find Legal Aid" data-hi="कानूनी सहायता पाएं">Find Legal Aid</a></li>
+          <li><a href="pages/case.html" data-en="My Case" data-hi="मेरा केस">My Case</a></li>
+          <li><a href="pages/drafts.html" data-en="Prepare Documents" data-hi="दस्तावेज़ तैयार करें">Prepare Documents</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading" data-en="Legal" data-hi="कानूनी">Legal</div>
+        <ul class="footer-links">
+          <li><a href="#" data-en="Privacy Policy" data-hi="गोपनीयता नीति">Privacy Policy</a></li>
+          <li><a href="#" data-en="Terms of Use" data-hi="उपयोग की शर्तें">Terms of Use</a></li>
+          <li><a href="#" data-en="Disclaimer" data-hi="अस्वीकरण">Disclaimer</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="footer-disclaimer" data-en="NyayaPath provides legal information and navigation assistance. It is not a substitute for a qualified legal professional. Sources should always be independently verified."
+         data-hi="NyayaPath कानूनी जानकारी और नेविगेशन सहायता प्रदान करता है। यह एक योग्य कानूनी पेशेवर का विकल्प नहीं है। स्रोतों को हमेशा स्वतंत्र रूप से सत्यापित किया जाना चाहिए।">
+        NyayaPath provides legal information and navigation assistance. It is not a substitute for a qualified legal professional. Sources should always be independently verified.
+      </p>
+      <div class="footer-copy">© 2025 NyayaPath</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════════ -->
+<script>
+  // ── Language switching ──────────────────────────────────
+  let currentLang = 'en';
+  try { currentLang = localStorage.getItem('nyayapath_lang') || 'en'; } catch(_) {}
+
+  function switchLang(lang) {
+    currentLang = lang;
+    try { localStorage.setItem('nyayapath_lang', lang); } catch(_) {}
+    document.documentElement.lang = lang;
+
+    // Update all data-en/data-hi elements
+    document.querySelectorAll('[data-en]').forEach(el => {
+      const text = el.getAttribute('data-' + lang) || el.getAttribute('data-en');
+      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+        el.placeholder = text;
+      } else {
+        el.innerHTML = text;
+      }
+    });
+
+    // Update lang buttons
+    document.getElementById('langEn').classList.toggle('active', lang === 'en');
+    document.getElementById('langHi').classList.toggle('active', lang === 'hi');
+
+    // Update textarea placeholder
+    const heroInput = document.getElementById('heroInput');
+    if (heroInput) {
+      heroInput.placeholder = lang === 'hi'
+        ? 'अपनी कानूनी समस्या हिंदी या English में बताएं…'
+        : 'Describe your legal problem in Hindi or English…';
+    }
+  }
+
+  // Apply on load
+  switchLang(currentLang);
+
+  // ── Mobile menu ─────────────────────────────────────────
+  function toggleMenu() {
+    const menu = document.getElementById('navMenu');
+    menu.classList.toggle('open');
+  }
+
+  // ── Hero submit ─────────────────────────────────────────
+  function submitHeroInput() {
+    const val = document.getElementById('heroInput').value.trim();
+    if (!val) {
+      document.getElementById('heroInput').focus();
+      return;
+    }
+    // Store and redirect to ask page
+    try { sessionStorage.setItem('nyayapath_intake', val); } catch(_) {}
+    window.location.href = 'pages/ask.html?q=' + encodeURIComponent(val);
+  }
+
+  // Enter key in textarea (Ctrl+Enter)
+  document.getElementById('heroInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) submitHeroInput();
+  });
+
+  // ── Voice input placeholder ──────────────────────────────
+  function startVoice() {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      alert('Voice input is not supported in this browser. Please type your problem.');
+      return;
+    }
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SR();
+    recognition.lang = currentLang === 'hi' ? 'hi-IN' : 'en-IN';
+    recognition.interimResults = false;
+    recognition.onresult = (e) => {
+      document.getElementById('heroInput').value = e.results[0][0].transcript;
+    };
+    recognition.start();
+  }
+
+  // ── Close menu on outside click ──────────────────────────
+  document.addEventListener('click', function(e) {
+    const menu = document.getElementById('navMenu');
+    const hamburger = document.getElementById('hamburger');
+    if (menu.classList.contains('open') && !menu.contains(e.target) && !hamburger.contains(e.target)) {
+      menu.classList.remove('open');
+    }
+  });
+</script>
+
+</body>
+</html>

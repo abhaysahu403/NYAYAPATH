@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prepare Documents — NyayaPath</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖</text></svg>" />
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/pages.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+</head>
+<body>
+<div id="app-nav"></div>
+<main class="np-page"><div class="container">
+
+<div class="np-page-head">
+  <div class="section-eyebrow" data-en="DOCUMENTS" data-hi="दस्तावेज़">DRAFTS</div>
+  <h1 data-en="Prepare Your Documents" data-hi="अपने दस्तावेज़ तैयार करें">Prepare Your Documents</h1>
+  <p data-en="Create reviewable drafts from the information you provide. Always review carefully and have a qualified legal professional check a draft before filing." data-hi="आपकी दी गई जानकारी से समीक्षा योग्य मसौदे बनाएं। दाखिल करने से पहले ध्यान से पढ़ें और योग्य कानूनी पेशेवर से जाँच कराएं।">Create reviewable drafts from the information you provide.</p>
+</div>
+<div class="np-draft-cards np-noprint" id="draftCards"></div>
+<div id="draftOut" style="margin-top:32px"></div>
+<hr class="np-divider np-noprint" />
+<h2 class="np-h np-noprint" data-en="Your earlier drafts" data-hi="आपके पिछले मसौदे">Your earlier drafts</h2>
+<div id="draftHistory" class="np-grid cols-2 np-noprint"></div>
+<div class="np-modal-back" id="draftModal" role="dialog" aria-modal="true"><div class="np-modal">
+  <div class="np-between"><h3 id="dmTitle"></h3><button class="btn btn-ghost btn-sm" onclick="closeDraftModal()" aria-label="Close">✕</button></div>
+  <div id="dmForm" style="margin-top:12px"></div>
+  <div class="np-row" style="margin-top:16px"><button class="btn btn-primary" id="dmGo" data-en="Create Draft" data-hi="मसौदा बनाएं">Create Draft</button><button class="btn btn-secondary" onclick="closeDraftModal()" data-en="Cancel" data-hi="रद्द करें">Cancel</button></div>
+</div></div>
+
+</div></main>
+<div id="app-footer"></div>
+<script type="module" src="../js/pages/drafts.js"></script>
+</body>
+</html>

@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Case — NyayaPath</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖</text></svg>" />
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/pages.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+  <style>
+    body { padding-top: 68px; background: var(--bg-primary); }
+
+    .page-header {
+      background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-dark-brown) 100%);
+      border-bottom: 1px solid var(--gold-border);
+      padding: var(--space-2xl) 0 var(--space-xl);
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: var(--space-lg);
+      padding: var(--space-xl) 0;
+    }
+
+    /* Sidebar */
+    .case-sidebar {}
+
+    .case-mini-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--gold-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: var(--space-md);
+      cursor: pointer;
+      transition: border-color var(--transition-fast);
+    }
+
+    .case-mini-card:hover, .case-mini-card.active {
+      border-color: var(--gold-main);
+    }
+
+    .case-mini-card.active { border-left: 3px solid var(--gold-main); }
+
+    .case-mini-inner {
+      padding: var(--space-md);
+    }
+
+    .case-mini-title {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text-ivory);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+
+    .case-mini-meta {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+    }
+
+    /* Case detail */
+    .case-detail { min-width: 0; }
+
+    .case-result-hero {
+      background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-dark-brown) 100%);
+      border: 1px solid var(--gold-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      margin-bottom: var(--space-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .case-result-hero::before {
+      content: '';
+      position: absolute; top: -60px; right: -60px;
+      width: 220px; height: 220px;
+      background: radial-gradient(circle, rgba(201,162,39,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .case-hero-title {
+      font-family: var(--font-serif);
+      font-size: 1.6rem;
+      color: var(--text-ivory);
+      margin-bottom: var(--space-sm);
+    }
+
+    .case-stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-md);
+      margin-top: var(--space-lg);
+    }
+
+    .case-found-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-sm);
+      margin-top: var(--space-lg);
+    }
+
+    /* Add case form */
+    .add-case-form {
+      background: var(--bg-secondary);
+      border: 1px solid var(--gold-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-md);
+    }
+
+    .form-grid .full { grid-column: 1 / -1; }
+
+    @media (max-width: 768px) {
+      .page-grid { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      .case-stat-row { grid-template-columns: 1fr 1fr; }
+      .case-found-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="../index.html" class="navbar-logo">
+      <div class="logo-icon"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="19" stroke="#C9A227" stroke-width="1.5" fill="none" opacity="0.4"/><line x1="20" y1="8" x2="20" y2="32" stroke="#C9A227" stroke-width="1.8"/><line x1="20" y1="14" x2="10" y2="20" stroke="#C9A227" stroke-width="1.5"/><line x1="20" y1="14" x2="30" y2="20" stroke="#C9A227" stroke-width="1.5"/><ellipse cx="10" cy="21.5" rx="5" ry="2.5" stroke="#C9A227" stroke-width="1.2" fill="rgba(201,162,39,0.15)"/><ellipse cx="30" cy="21.5" rx="5" ry="2.5" stroke="#C9A227" stroke-width="1.2" fill="rgba(201,162,39,0.15)"/><circle cx="20" cy="32" r="2" fill="#C9A227" opacity="0.8"/></svg></div>
+      <span class="logo-text">NyayaPath</span>
+    </a>
+    <ul class="navbar-nav" id="navMenu">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="ask.html">Ask NyayaPath</a></li>
+      <li><a href="case.html" class="active">My Case</a></li>
+      <li><a href="research.html">Legal Research</a></li>
+      <li><a href="documents.html">Documents</a></li>
+      <li><a href="action-plan.html">Action Plan</a></li>
+      <li><a href="legal-aid.html">Legal Aid</a></li>
+    </ul>
+    <div class="navbar-right">
+      <div class="lang-switcher">
+        <button class="lang-btn active" id="langEn" onclick="switchLang('en')">EN</button>
+        <span class="lang-sep">|</span>
+        <button class="lang-btn" id="langHi" onclick="switchLang('hi')">हिं</button>
+      </div>
+      <button class="navbar-hamburger" onclick="document.getElementById('navMenu').classList.toggle('open')"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- Page Header -->
+<div class="page-header">
+  <div class="container">
+    <div class="section-eyebrow" data-en="Case Navigation" data-hi="केस नेविगेशन">Case Navigation</div>
+    <h1 style="font-size: 2rem; margin-bottom: var(--space-sm);" data-en="My Case" data-hi="मेरा केस">My Case</h1>
+    <p style="color: var(--text-muted); font-size: 0.9rem;" data-en="Search for your case or add case details to track and understand." data-hi="अपना केस खोजें या ट्रैक और समझने के लिए केस विवरण जोड़ें।">Search for your case or add case details to track and understand.</p>
+  </div>
+</div>
+
+<main>
+  <div class="container">
+    <div class="page-grid">
+
+      <!-- SIDEBAR: Case list + Add -->
+      <aside class="case-sidebar">
+        <div style="margin-bottom: var(--space-md);">
+          <button class="btn btn-primary" style="width:100%;" onclick="showAddForm()" data-en="+ Add a Case" data-hi="+ केस जोड़ें">+ Add a Case</button>
+        </div>
+
+        <!-- Case search -->
+        <div class="search-bar" style="margin-bottom: var(--space-md);">
+          <input type="text" id="caseSearchInput" placeholder="Search by CNR, title…" aria-label="Search cases" />
+          <button class="search-bar-btn" onclick="searchCases()">Go</button>
+        </div>
+
+        <!-- Cases list -->
+        <div id="casesList">
+          <div class="state-container" style="padding: var(--space-xl) var(--space-md);">
+            <svg class="state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <div class="state-title" data-en="No cases yet" data-hi="अभी कोई केस नहीं">No cases yet</div>
+            <div class="state-desc" data-en="Add a case to start tracking it." data-hi="ट्रैकिंग शुरू करने के लिए एक केस जोड़ें।">Add a case to start tracking it.</div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <div class="case-detail" id="caseDetailArea">
+
+        <!-- Add Case Form (shown by default if no cases) -->
+        <div id="addCaseForm" class="add-case-form">
+          <h3 style="margin-bottom: var(--space-lg);" data-en="Add Your Case Details" data-hi="अपना केस विवरण जोड़ें">Add Your Case Details</h3>
+          <p style="color:var(--text-muted); font-size: 0.85rem; margin-bottom: var(--space-lg);"
+             data-en="Enter the information you have. You don't need to fill everything." data-hi="जो जानकारी आपके पास है वह दर्ज करें। सब कुछ भरना जरूरी नहीं।">Enter the information you have. You don't need to fill everything.</p>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" data-en="CNR Number" data-hi="CNR नंबर">CNR Number</label>
+              <input class="form-input" id="cnrInput" type="text" placeholder="e.g. MPJB010123456789" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" data-en="Case Number" data-hi="केस नंबर">Case Number</label>
+              <input class="form-input" id="caseNumInput" type="text" placeholder="e.g. CS/100/2020" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" data-en="Case Title" data-hi="केस शीर्षक">Case Title (optional)</label>
+              <input class="form-input" id="caseTitleInput" type="text" placeholder="e.g. Ram Prasad vs State" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" data-en="Case Type" data-hi="केस प्रकार">Case Type</label>
+              <select class="form-select" id="caseTypeSelect">
+                <option value="CIVIL">Civil</option>
+                <option value="CRIMINAL">Criminal</option>
+                <option value="WRIT">Writ</option>
+                <option value="APPEAL">Appeal</option>
+                <option value="REVISION">Revision</option>
+                <option value="OTHER">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" data-en="State" data-hi="राज्य">State</label>
+              <input class="form-input" id="stateInput" type="text" placeholder="e.g. Madhya Pradesh" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" data-en="District" data-hi="जिला">District</label>
+              <input class="form-input" id="districtInput" type="text" placeholder="e.g. Bhopal" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" data-en="Filing Year" data-hi="दाखिल वर्ष">Filing Year</label>
+              <input class="form-input" id="filingYearInput" type="number" placeholder="e.g. 2020" min="1950" max="2025" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" data-en="Current Status" data-hi="वर्तमान स्थिति">Current Status</label>
+              <select class="form-select" id="statusSelect">
+                <option value="UNKNOWN">Unknown</option>
+                <option value="PENDING">Pending</option>
+                <option value="DISPOSED">Disposed</option>
+                <option value="DECIDED">Decided</option>
+                <option value="TRANSFERRED">Transferred</option>
+              </select>
+            </div>
+            <div class="form-group full">
+              <label class="form-label" data-en="Describe your case (optional)" data-hi="अपना केस वर्णन करें (वैकल्पिक)">Describe your case (optional)</label>
+              <textarea class="form-textarea" id="descInput" rows="3" placeholder="Brief description of your legal issue…"></textarea>
+            </div>
+          </div>
+
+          <div style="margin-top: var(--space-lg); display: flex; gap: var(--space-sm);">
+            <button class="btn btn-primary" onclick="addCase()" data-en="Save Case" data-hi="केस सेव करें">Save Case</button>
+            <button class="btn btn-ghost btn-sm" onclick="hideAddForm()" data-en="Cancel" data-hi="रद्द करें">Cancel</button>
+          </div>
+
+          <div class="warn-banner" style="margin-top: var(--space-lg);">
+            <span data-en="Case details you add are stored in your browser session and linked to your account if you're logged in. NyayaPath does not access live court records automatically — enter information from your court documents."
+                  data-hi="आपके द्वारा जोड़े गए केस विवरण आपके ब्राउज़र सत्र में संग्रहीत हैं। NyayaPath स्वतः लाइव कोर्ट रिकॉर्ड तक नहीं पहुंचता — अपने कोर्ट दस्तावेजों से जानकारी दर्ज करें।">
+              Case details you add are stored and linked to your account if you're logged in. NyayaPath does not access live court records automatically — enter information from your court documents.
+            </span>
+          </div>
+        </div>
+
+        <!-- Case Detail View (hidden by default) -->
+        <div id="caseDetailView" style="display:none;">
+          <!-- Result Hero (the WOW screen) -->
+          <div class="case-result-hero">
+            <div style="display:flex; align-items:flex-start; justify-content:space-between; gap: var(--space-md); flex-wrap:wrap;">
+              <div>
+                <div class="section-eyebrow" style="margin-bottom: var(--space-sm);" data-en="YOUR LEGAL PATH" data-hi="आपका कानूनी मार्ग">YOUR LEGAL PATH</div>
+                <h2 class="case-hero-title" id="caseDetailTitle">Property / Land Dispute</h2>
+                <div style="display:flex; gap: var(--space-sm); flex-wrap:wrap; align-items:center; margin-top: 6px;">
+                  <span id="caseDetailStatus" class="badge badge-pending">Pending</span>
+                  <span id="caseDetailType" class="badge badge-gold">Civil</span>
+                  <span id="caseDetailLocation" style="font-size:0.8rem; color:var(--text-muted);"></span>
+                </div>
+              </div>
+              <div style="display:flex; gap: var(--space-sm);">
+                <button class="btn btn-secondary btn-sm" onclick="askAboutCase()" data-en="Ask About This Case" data-hi="इस केस के बारे में पूछें">Ask About This Case</button>
+              </div>
+            </div>
+
+            <div class="case-stat-row">
+              <div class="stat-chip">
+                <span class="stat-chip-value" id="statStatus">—</span>
+                <span class="stat-chip-label" data-en="Status" data-hi="स्थिति">Status</span>
+              </div>
+              <div class="stat-chip">
+                <span class="stat-chip-value" id="statAge">—</span>
+                <span class="stat-chip-label" data-en="Case Age" data-hi="केस की आयु">Case Age</span>
+              </div>
+              <div class="stat-chip">
+                <span class="stat-chip-value" id="statStage">—</span>
+                <span class="stat-chip-label" data-en="Current Stage" data-hi="वर्तमान चरण">Current Stage</span>
+              </div>
+            </div>
+
+            <div class="case-found-row">
+              <div class="found-item"><span class="found-item-icon">⚖</span> <span id="judgmentCount" data-en="0 Relevant Judgments" data-hi="0 प्रासंगिक निर्णय">—</span></div>
+              <div class="found-item"><span class="found-item-icon">📜</span> <span id="eventCount" data-en="0 Case Events" data-hi="0 केस घटनाएं">—</span></div>
+              <div class="found-item"><span class="found-item-icon">📁</span> <span id="partyCount" data-en="0 Parties" data-hi="0 पक्षकार">—</span></div>
+              <div class="found-item"><span class="found-item-icon">🕐</span> <span id="nextHearing" data-en="Next hearing: unknown" data-hi="अगली सुनवाई: अज्ञात">—</span></div>
+            </div>
+          </div>
+
+          <!-- Tabs -->
+          <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('timeline',this)" data-en="Timeline" data-hi="समयरेखा">Timeline</button>
+            <button class="tab-btn" onclick="switchTab('hearings',this)" data-en="Hearings" data-hi="सुनवाई">Hearings</button>
+            <button class="tab-btn" onclick="switchTab('parties',this)" data-en="Parties" data-hi="पक्षकार">Parties</button>
+            <button class="tab-btn" onclick="switchTab('notes',this)" data-en="Notes" data-hi="नोट्स">Notes</button>
+          </div>
+
+          <!-- Timeline tab -->
+          <div id="tab-timeline" class="tab-content active">
+            <div id="timelineContent">
+              <div class="state-container" style="padding: var(--space-xl);">
+                <div class="state-title" data-en="No timeline events" data-hi="कोई समयरेखा घटना नहीं">No timeline events recorded</div>
+                <div class="state-desc" data-en="Add events to build your case timeline." data-hi="अपनी केस समयरेखा बनाने के लिए घटनाएं जोड़ें।">Add events to build your case timeline.</div>
+                <button class="btn btn-secondary btn-sm" style="margin-top:var(--space-md);" onclick="showAddEventModal()"
+                        data-en="Add Event" data-hi="घटना जोड़ें">Add Event</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hearings tab -->
+          <div id="tab-hearings" class="tab-content">
+            <div id="hearingsContent">
+              <div class="state-container" style="padding: var(--space-xl);">
+                <div class="state-title" data-en="No hearings recorded" data-hi="कोई सुनवाई दर्ज नहीं">No hearings recorded</div>
+                <div class="state-desc" data-en="Add hearing records from your court documents." data-hi="अपने कोर्ट दस्तावेजों से सुनवाई रिकॉर्ड जोड़ें।">Add hearing records from your court documents.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Parties tab -->
+          <div id="tab-parties" class="tab-content">
+            <div id="partiesContent">
+              <div class="state-container" style="padding: var(--space-xl);">
+                <div class="state-title" data-en="No parties recorded" data-hi="कोई पक्षकार दर्ज नहीं">No parties recorded</div>
+                <div class="state-desc" data-en="Add petitioner, respondent and other parties." data-hi="याचिकाकर्ता, प्रतिवादी और अन्य पक्षकार जोड़ें।">Add petitioner, respondent and other parties.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Notes tab -->
+          <div id="tab-notes" class="tab-content">
+            <div style="padding: var(--space-md) 0;">
+              <textarea class="form-textarea" id="caseNotes" rows="6"
+                placeholder="Add your personal notes about this case…"></textarea>
+              <button class="btn btn-primary btn-sm" style="margin-top: var(--space-sm);"
+                      onclick="saveNotes()" data-en="Save Notes" data-hi="नोट्स सेव करें">Save Notes</button>
+            </div>
+          </div>
+
+          <!-- Next Steps CTA -->
+          <div style="margin-top: var(--space-xl); display:flex; gap: var(--space-sm); flex-wrap:wrap;">
+            <a href="action-plan.html" class="btn btn-primary btn-sm" data-en="View Action Plan →" data-hi="कार्य योजना देखें →">View Action Plan →</a>
+            <a href="research.html" class="btn btn-secondary btn-sm" data-en="Find Similar Cases" data-hi="समान केस खोजें">Find Similar Cases</a>
+            <a href="drafts.html" class="btn btn-secondary btn-sm" data-en="Prepare Document" data-hi="दस्तावेज़ तैयार करें">Prepare Document</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer class="footer" style="margin-top: var(--space-3xl);">
+  <div class="container">
+    <div class="footer-bottom">
+      <p class="footer-disclaimer">NyayaPath provides legal information and navigation assistance. It is not a substitute for a qualified legal professional.</p>
+      <div class="footer-copy">© 2025 NyayaPath</div>
+    </div>
+  </div>
+</footer>
+
+<script type="module">
+  import { Cases } from '../js/api/endpoints.js';
+  import { esc, showToast, statusBadge, caseTypeLabel, caseAge, formatDate, getLang, setLang } from '../js/utils/helpers.js';
+
+  let currentLang = getLang();
+  let activeCaseId = null;
+  let casesData = [];
+
+  window.switchLang = (lang) => {
+    currentLang = lang; setLang(lang);
+    document.querySelectorAll('[data-en]').forEach(el => {
+      const t = el.getAttribute('data-' + lang) || el.getAttribute('data-en');
+      if (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT') el.placeholder = t;
+      else el.innerHTML = t;
+    });
+    document.getElementById('langEn').classList.toggle('active', lang === 'en');
+    document.getElementById('langHi').classList.toggle('active', lang === 'hi');
+  };
+  switchLang(currentLang);
+
+  // Load cases on init
+  loadCases();
+
+  async function loadCases() {
+    try {
+      const res = await Cases.list();
+      const items = res || [];
+      casesData = Array.isArray(items) ? items : [];
+      renderCasesList(casesData);
+    } catch(err) {
+      if (true) {
+        // Not logged in — show helpful message
+        document.getElementById('casesList').innerHTML = `
+          <div class="warn-banner">
+            <span>${currentLang === 'hi'
+              ? 'सहेजे गए केस अभी लोड नहीं हो सके। आप नीचे जानकारी जोड़कर देख सकते हैं।'
+              : 'We could not load saved cases right now. You can still add information below to explore.'}</span>
+          </div>`;
+      }
+    }
+  }
+
+  function renderCasesList(cases) {
+    if (!cases.length) return;
+    const html = cases.map(c => `
+      <div class="case-mini-card ${activeCaseId === c.id ? 'active' : ''}" onclick="loadCaseDetail('${c.id}')">
+        <div class="case-mini-inner">
+          <div class="case-mini-title">${esc(c.case_title || c.cnr_number || c.case_number || 'Case ' + c.id.slice(0,8))}</div>
+          <div class="case-mini-meta">${esc(c.state || '')} ${c.filing_year ? '· ' + c.filing_year : ''} · ${c.status || 'Unknown'}</div>
+        </div>
+      </div>`).join('');
+    document.getElementById('casesList').innerHTML = html;
+  }
+
+  window.showAddForm = () => {
+    document.getElementById('addCaseForm').style.display = 'block';
+    document.getElementById('caseDetailView').style.display = 'none';
+  };
+
+  window.hideAddForm = () => {
+    document.getElementById('addCaseForm').style.display = activeCaseId ? 'none' : 'block';
+    if (activeCaseId) document.getElementById('caseDetailView').style.display = 'block';
+  };
+
+  window.addCase = async () => {
+    const data = {
+      cnr_number:   document.getElementById('cnrInput').value.trim() || null,
+      case_number:  document.getElementById('caseNumInput').value.trim() || null,
+      case_title:   document.getElementById('caseTitleInput').value.trim() || null,
+      case_type:    document.getElementById('caseTypeSelect').value,
+      state:        document.getElementById('stateInput').value.trim() || null,
+      district:     document.getElementById('districtInput').value.trim() || null,
+      filing_year:  parseInt(document.getElementById('filingYearInput').value) || null,
+      status:       document.getElementById('statusSelect').value,
+      description:  document.getElementById('descInput').value.trim() || null,
+    };
+    if (!data.cnr_number && !data.case_number && !data.case_title) {
+      showToast(currentLang === 'hi' ? 'कम से कम CNR, केस नंबर या शीर्षक दर्ज करें।' : 'Please enter at least a CNR, case number or title.', 'error');
+      return;
+    }
+    try {
+      const res = await Cases.create(data);
+      showToast(currentLang === 'hi' ? 'केस सेव हो गया!' : 'Case saved!', 'success');
+      casesData.unshift(res);
+      renderCasesList(casesData);
+      loadCaseDetail(res.id);
+    } catch(err) {
+      if (err.status === 401) {
+        // Store locally and show
+        const localId = 'local-' + Date.now();
+        const localCase = { id: localId, ...data, events: [], hearings: [], parties: [] };
+        casesData.unshift(localCase);
+        renderCasesList(casesData);
+        renderCaseDetail(localCase);
+        showToast(currentLang === 'hi' ? 'केस स्थानीय रूप से सहेजा गया (सर्वर पर सहेजा नहीं गया)' : 'Case saved locally (not saved to server)', 'info');
+      } else {
+        showToast(err.message, 'error');
+      }
+    }
+  };
+
+  window.loadCaseDetail = async (id) => {
+    activeCaseId = id;
+    document.getElementById('addCaseForm').style.display = 'none';
+    document.getElementById('caseDetailView').style.display = 'block';
+
+    // Find local
+    let c = casesData.find(x => x.id === id);
+    if (c) renderCaseDetail(c);
+
+    // Try to fetch fresh from API
+    try {
+      const fresh = await Cases.get(id);
+      renderCaseDetail(fresh);
+    } catch(_) {}
+  };
+
+  function renderCaseDetail(c) {
+    document.getElementById('caseDetailTitle').textContent =
+      c.case_title || topicFromDesc(c.description) || caseTypeLabel(c.case_type, currentLang) + ' Case';
+
+    document.getElementById('caseDetailStatus').outerHTML = statusBadge(c.status, currentLang);
+    document.getElementById('caseDetailType').textContent = caseTypeLabel(c.case_type, currentLang);
+    document.getElementById('caseDetailLocation').textContent = [c.district, c.state].filter(Boolean).join(', ');
+
+    document.getElementById('statStatus').textContent = c.status || '—';
+    document.getElementById('statAge').textContent = c.filing_year
+      ? (new Date().getFullYear() - c.filing_year) + ' yrs'
+      : caseAge(c.filing_date) || '—';
+    document.getElementById('statStage').textContent = c.current_stage || '—';
+
+    const events = c.events || [];
+    const parties = c.parties || [];
+    const hearings = c.hearings || [];
+
+    document.getElementById('judgmentCount').textContent = events.length + ' ' +
+      (currentLang === 'hi' ? 'घटनाएं' : 'Events');
+    document.getElementById('eventCount').textContent = hearings.length + ' ' +
+      (currentLang === 'hi' ? 'सुनवाई' : 'Hearings');
+    document.getElementById('partyCount').textContent = parties.length + ' ' +
+      (currentLang === 'hi' ? 'पक्षकार' : 'Parties');
+
+    document.getElementById('nextHearing').textContent = c.next_hearing_date
+      ? (currentLang === 'hi' ? 'अगली सुनवाई: ' : 'Next hearing: ') + formatDate(c.next_hearing_date, currentLang)
+      : (currentLang === 'hi' ? 'अगली सुनवाई: अज्ञात' : 'Next hearing: unknown');
+
+    // Timeline
+    if (events.length) {
+      document.getElementById('timelineContent').innerHTML = '<div class="timeline">' +
+        events.map((ev, i) => `
+          <div class="timeline-item">
+            <div class="timeline-dot ${i === events.length-1 ? 'current' : ''}"></div>
+            <div class="timeline-date">${formatDate(ev.event_date, currentLang)}</div>
+            <div class="timeline-title">${esc(ev.title || ev.event_type)}</div>
+            ${ev.description ? `<div class="timeline-desc">${esc(ev.description)}</div>` : ''}
+            ${ev.source_url ? `<a href="${esc(ev.source_url)}" target="_blank" class="source-card" style="margin-top:6px; display:inline-flex;">⚖ Source →</a>` : ''}
+            ${ev.data_origin === 'DEMO' ? '<span class="badge badge-demo" style="margin-top:4px;">Demo</span>' : ''}
+          </div>`).join('')
+        + '</div>';
+    }
+
+    // Hearings
+    if (hearings.length) {
+      document.getElementById('hearingsContent').innerHTML = hearings.map(h => `
+        <div class="card" style="margin-bottom: var(--space-sm);">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <div>
+              <div style="font-weight:500; color:var(--text-ivory); margin-bottom:4px;">${formatDate(h.hearing_date, currentLang)}</div>
+              ${h.purpose ? `<div style="font-size:0.85rem; color:var(--text-secondary);">${esc(h.purpose)}</div>` : ''}
+              ${h.result ? `<div style="font-size:0.82rem; color:var(--text-muted); margin-top:4px;">${esc(h.result)}</div>` : ''}
+            </div>
+            ${h.next_date ? `<div class="badge badge-gold" style="font-size:0.72rem;">Next: ${formatDate(h.next_date, currentLang)}</div>` : ''}
+          </div>
+        </div>`).join('');
+    }
+
+    // Parties
+    if (parties.length) {
+      document.getElementById('partiesContent').innerHTML = '<div style="display:flex; flex-direction:column; gap: var(--space-sm);">' +
+        parties.map(p => `
+          <div class="card" style="padding: var(--space-md);">
+            <div style="display:flex; justify-content:space-between;">
+              <div>
+                <div style="font-weight:500;">${esc(p.name)}</div>
+                ${p.advocate ? `<div style="font-size:0.78rem; color:var(--text-muted); margin-top:2px;">Advocate: ${esc(p.advocate)}</div>` : ''}
+              </div>
+              <span class="badge badge-gold" style="font-size:0.68rem;">${esc(p.party_type)}</span>
+            </div>
+          </div>`).join('')
+        + '</div>';
+    }
+
+    // Update active in sidebar
+    document.querySelectorAll('.case-mini-card').forEach(el => el.classList.remove('active'));
+    const activeEl = document.querySelector(`.case-mini-card[onclick*="${c.id}"]`);
+    if (activeEl) activeEl.classList.add('active');
+  }
+
+  function topicFromDesc(desc) {
+    if (!desc) return null;
+    if (/ज़मीन|जमीन|land|property|plot/i.test(desc)) return 'Property / Land Dispute';
+    if (/criminal|क्राइम|अपराध/i.test(desc)) return 'Criminal Case';
+    return null;
+  }
+
+  window.switchTab = (tab, btn) => {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    btn.classList.add('active');
+  };
+
+  window.askAboutCase = () => {
+    const c = casesData.find(x => x.id === activeCaseId);
+    if (c) {
+      const desc = `Case: ${c.case_title || c.case_number || c.cnr_number}. Status: ${c.status}. State: ${c.state || 'unknown'}.`;
+      try { sessionStorage.setItem('nyayapath_intake', desc); } catch(_) {}
+      window.location.href = 'ask.html?q=' + encodeURIComponent(desc);
+    }
+  };
+
+  window.searchCases = () => {
+    const q = document.getElementById('caseSearchInput').value.trim();
+    if (!q) { renderCasesList(casesData); return; }
+    const filtered = casesData.filter(c =>
+      (c.cnr_number||'').includes(q) ||
+      (c.case_number||'').toLowerCase().includes(q.toLowerCase()) ||
+      (c.case_title||'').toLowerCase().includes(q.toLowerCase())
+    );
+    renderCasesList(filtered);
+  };
+
+  window.saveNotes = () => {
+    const notes = document.getElementById('caseNotes').value;
+    try { localStorage.setItem('case_notes_' + activeCaseId, notes); } catch(_) {}
+    showToast(currentLang === 'hi' ? 'नोट्स सेव हो गए' : 'Notes saved', 'success');
+  };
+
+  window.showAddEventModal = () => showToast('Event adding available when case is saved', 'info');
+</script>
+
+</body>
+</html>

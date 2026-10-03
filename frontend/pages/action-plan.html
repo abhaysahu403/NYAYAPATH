@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Action Plan — NyayaPath</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖</text></svg>" />
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/pages.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+</head>
+<body>
+<div id="app-nav"></div>
+<main class="np-page"><div class="container">
+
+<div class="np-page-head">
+  <div class="section-eyebrow" data-en="ACTION PLAN" data-hi="कार्य योजना">ACTION PLAN</div>
+  <h1 data-en="Your Next Steps" data-hi="आपके अगले कदम">Your Next Steps</h1>
+  <p data-en="Based on the information available, here is an organized path to help you understand what you could consider next." data-hi="उपलब्ध जानकारी के आधार पर, यह एक व्यवस्थित मार्ग है जो आपको आगे के संभावित कदम समझने में मदद करता है।">Based on the information available, here is an organized path to help you understand what you could consider next.</p>
+</div>
+<div id="planInput" class="card np-noprint" style="margin-bottom:24px">
+  <label class="form-label" for="planMsg" data-en="Describe your situation" data-hi="अपनी स्थिति बताएं">Describe your situation</label>
+  <textarea id="planMsg" class="form-textarea" rows="3" data-en="मेरे पड़ोसी ने मेरी जमीन पर कब्जा कर लिया है और केस 4 साल से चल रहा है..." data-hi="मेरे पड़ोसी ने मेरी जमीन पर कब्जा कर लिया है और केस 4 साल से चल रहा है..." placeholder=""></textarea>
+  <div class="np-row" style="margin-top:12px"><button class="btn btn-primary" id="genBtn" data-en="Build My Action Plan" data-hi="मेरी कार्य योजना बनाएं">Build My Action Plan</button>
+  <select id="planPick" class="form-select" style="max-width:280px" aria-label="Saved plans"></select></div>
+</div>
+<div id="planRoot"></div>
+
+</div></main>
+<div id="app-footer"></div>
+<script type="module" src="../js/pages/action-plan.js"></script>
+</body>
+</html>

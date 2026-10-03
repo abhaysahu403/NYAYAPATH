@@ -1,0 +1,73 @@
+:root {
+  /* Primary Backgrounds */
+  --bg-primary: #171513;
+  --bg-secondary: #211D19;
+  --bg-dark-brown: #2A211A;
+  --bg-warm-brown: #3A2A1E;
+
+  /* Gold */
+  --gold-main: #C9A227;
+  --gold-bright: #D9B44A;
+  --gold-antique: #A77A16;
+  --gold-soft: #E5C76B;
+  --gold-border: rgba(201, 162, 39, 0.25);
+  --gold-border-hover: rgba(201, 162, 39, 0.6);
+  --gold-glow: rgba(201, 162, 39, 0.08);
+
+  /* Ivory / Light */
+  --ivory: #F7F2E8;
+  --warm-white: #FCFAF5;
+  --paper: #F1EBDD;
+
+  /* Text */
+  --text-primary: #211D19;
+  --text-secondary: #655B50;
+  --text-muted: #8B8175;
+  --text-white: #FFFFFF;
+  --text-ivory: #F7F2E8;
+  --text-gold: #D9B44A;
+
+  /* Indian Accents (subtle) */
+  --saffron: #FF9933;
+  --india-green: #138808;
+  --ashoka-blue: #000080;
+
+  /* Status */
+  --status-pending: #E8A83A;
+  --status-disposed: #4CAF7D;
+  --status-danger: #E05252;
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 40px;
+  --space-2xl: 64px;
+  --space-3xl: 96px;
+
+  /* Border radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+
+  /* Shadows */
+  --shadow-card: 0 2px 20px rgba(0,0,0,0.4);
+  --shadow-gold: 0 0 30px rgba(201,162,39,0.15);
+  --shadow-deep: 0 8px 40px rgba(0,0,0,0.6);
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 400ms ease;
+
+  /* Font families */
+  --font-serif: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  --font-sans: 'Inter', 'DM Sans', system-ui, sans-serif;
+  --font-devanagari: 'Noto Serif Devanagari', 'Noto Sans Devanagari', serif;
+
+  /* Container */
+  --container-max: 1200px;
+  --container-narrow: 820px;
+}
