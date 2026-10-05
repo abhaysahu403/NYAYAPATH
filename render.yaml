@@ -1,0 +1,18 @@
+# Render Blueprint: free backend. Database = Neon (free Postgres + pgvector); frontend = Vercel.
+services:
+  - type: web
+    name: nyayapath-api
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/v1/health/
+    envVars:
+      - {key: DJANGO_SETTINGS_MODULE, value: config.settings.development}
+      - {key: DEBUG, value: "False"}
+      - {key: ALLOWED_HOSTS, value: "*"}
+      - {key: CORS_ALLOW_ALL_ORIGINS, value: "True"}
+      - {key: WEB_CONCURRENCY, value: "1"}
+      - {key: AI_PROVIDER, value: gemini}
+      - {key: GEMINI_MODEL, value: gemini-flash-latest}
+      - {key: SECRET_KEY, generateValue: true}
+      - {key: DATABASE_URL, sync: false}     # Neon connection string (…?sslmode=require)
+      - {key: GEMINI_API_KEY, sync: false}

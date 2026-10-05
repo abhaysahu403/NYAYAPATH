@@ -42,3 +42,9 @@ For real use: set `.env` (copy `.env.example`), `AI_PROVIDER=gemini`, `GEMINI_AP
 ### HTTPS
 Set `SITE_ADDRESS` in `.env` to a hostname pointing at the server (ports 80+443 open), e.g. `SITE_ADDRESS=1-2-3-4.sslip.io`.
 Caddy fetches and renews a Let's Encrypt certificate automatically. Leave unset for plain HTTP on :80.
+
+## Free hosting (Render + Neon + Vercel)
+1. **Neon**: create a free project, copy the connection string (keep `?sslmode=require`). pgvector is enabled by the first migration.
+2. **Render**: New → Blueprint → this repo. Set `DATABASE_URL` (Neon) and `GEMINI_API_KEY`. Service name `nyayapath-api` (else edit `frontend/vercel.json`).
+3. **Vercel**: import this repo, Root Directory `frontend`, framework "Other". `/api/*` is proxied to Render by `vercel.json`.
+Free Render sleeps after ~15 min idle (first request ~50s) and its disk is not persistent (uploads are lost on restart).

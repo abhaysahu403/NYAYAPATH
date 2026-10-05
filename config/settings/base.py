@@ -2,7 +2,7 @@
 import os
 from datetime import timedelta
 from pathlib import Path
-from urllib.parse import unquote, urlparse
+from urllib.parse import parse_qs, unquote, urlparse
 
 from dotenv import load_dotenv
 
@@ -104,6 +104,7 @@ def _database_from_env() -> dict:
             "PASSWORD": unquote(parsed.password or ""),
             "HOST": parsed.hostname or "localhost",
             "PORT": str(parsed.port or 5432),
+            "OPTIONS": {k: v[0] for k, v in parse_qs(parsed.query).items() if k in ("sslmode", "channel_binding")},
         }
     return {
         "ENGINE": "django.db.backends.postgresql",
@@ -225,7 +226,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # --------------------------------------------------------------------------- AI
 AI_PROVIDER = env("AI_PROVIDER", "mock")  # mock | gemini
 GEMINI_API_KEY = env("GEMINI_API_KEY") or env("GOOGLE_API_KEY") or ""
-GEMINI_MODEL = env("GEMINI_MODEL", "gemini-2.5-flash")
+GEMINI_MODEL = env("GEMINI_MODEL", "gemini-flash-latest")
 GEMINI_EMBEDDING_MODEL = env("GEMINI_EMBEDDING_MODEL", "gemini-embedding-001")
 EMBEDDING_DIM = env_int("EMBEDDING_DIM", 768)  # changing this requires a migration + re-embedding
 AI_MAX_INPUT_CHARS = env_int("AI_MAX_INPUT_CHARS", 3000)
