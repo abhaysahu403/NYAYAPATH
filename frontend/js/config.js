@@ -7,7 +7,7 @@
  * Set to false (and remove the credentials) in production; real authentication will be added later.
  */
 export default {
-  API_BASE: (window.NYAYAPATH_API_BASE ?? '') + '/api/v1',
+  API_BASE: (window.NYAYAPATH_API_BASE ?? (location.hostname.endsWith('.vercel.app') ? 'https://nyayapath-api.onrender.com' : '')) + '/api/v1',
   DEV_AUTO_LOGIN: window.NYAYAPATH_DEV_AUTO_LOGIN !== false,
   DEV_EMAIL: 'demo@nyayapath.local',
   DEV_PASSWORD: 'DemoPass#12345',
